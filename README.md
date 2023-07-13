@@ -1,5 +1,5 @@
 # tailwindcomponents ![Stars](https://img.shields.io/github/stars/realTristan/tailwindcomponents?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/tailwindcomponents?label=Watchers)
-![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/0c4c41e0-1027-49d2-b10a-8b4e7bf2f17f)
+![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/ff8ffcf9-ae4d-4d4d-a79c-31264ef01880)
 
 # Todo
 1. Use Monaco to see the code of the components
