@@ -8,3 +8,5 @@ use Monaco editor to see the code to the components
 be able to add, update, and delete the components
 
 login with github
+
+when upload image ask to take a screenshot of it before submitting
