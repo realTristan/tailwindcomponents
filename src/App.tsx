@@ -84,7 +84,7 @@ function wrapCode(code: string): string {
 }
 
 // The main app
-function App() {
+export default function App() {
   // State for the components
   const [comps, setComps] = useState([]);
 
@@ -123,5 +123,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
