@@ -8,14 +8,15 @@ function readComponent(url: string): Promise<string> {
   return fetch(url).then((res: any) => res.text());
 }
 
-// Get the image url from the dir name
+/* Get the image url from the dir name
 function getImageFromDirName(dir_name: string): string {
-  return `https://raw.githubusercontent.com/realTristan/tailwindcomponents/main/tailwindcomponents/${dir_name}/${dir_name}.png`;
+  return `https://raw.githubusercontent.com/realTristan/tailwindcomponents/main/tailwindcomponents/${dir_name}/.png`;
 }
+*/
 
 // Get the html url from the dir name
 function getHtmlFromDirName(dir_name: string): string {
-  return `https://raw.githubusercontent.com/realTristan/tailwindcomponents/main/tailwindcomponents/${dir_name}/${dir_name}.html`;
+  return `https://raw.githubusercontent.com/realTristan/tailwindcomponents/main/tailwindcomponents/${dir_name}/.html`;
 }
 
 // Check if the dir is valid
@@ -43,14 +44,14 @@ async function getComponentsFromDirs(dirs: any[]): Promise<any[]> {
       key: dir.sha,
       html_url: `${dir.html_url}/${dir.name}.html`,
       raw_url: getHtmlFromDirName(dir.name),
-      image: getImageFromDirName(dir.name),
+      // image: getImageFromDirName(dir.name),
     };
 
     // Read the component
     await readComponent(comp.raw_url).then((code: string) => {
       components.push({
         ...comp,
-        code: code,
+        code: code.toString(),
       });
     });
   }
@@ -88,6 +89,7 @@ function App() {
   }
 
   // Return the components
+  // <img src={comp.image} alt={comp.path} />
   return (
     <div className="App">
       <div className="flex flex-col items-center">
@@ -98,7 +100,7 @@ function App() {
                 {comp.path}
               </a>
             </div>
-            <img src={comp.image} alt={comp.path} />
+            <div dangerouslySetInnerHTML={{ __html: comp.code }}></div>
             <CodeBlock code={comp.code} />
           </div>
         ))}
