@@ -4,7 +4,7 @@ import CodeBlock from "./components/CodeBlock";
 import "./App.css";
 
 // Read the component from the url
-function readComponent(url: string): Promise<any> {
+function readComponent(url: string): Promise<string> {
   return fetch(url).then((res: any) => res.text());
 }
 
@@ -47,7 +47,7 @@ async function getComponentsFromDirs(dirs: any[]): Promise<any[]> {
     };
 
     // Read the component
-    await readComponent(comp.raw_url).then((code) => {
+    await readComponent(comp.raw_url).then((code: string) => {
       components.push({
         ...comp,
         code: code,
@@ -88,20 +88,18 @@ function App() {
   }
 
   // Return the components
+  // <img src={comp.image} alt={comp.path} />
   return (
     <div className="App">
       <div className="flex flex-col items-center">
         {comps.map((comp: any) => (
           <div key={comp.key}>
             <div className="bg-gray-800 p-4 rounded-lg mt-10 mb-4">
-              <a
-                href={comp.html_url}
-                className="text-lg font-normal text-white"
-              >
+              <a href={comp.html_url} className="text-lg font-normal text-white">
                 {comp.path}
               </a>
             </div>
-            <img src={comp.image} alt={comp.path} />
+            <div className="m-6" dangerouslySetInnerHTML={{ __html: comp.code }} />
             <CodeBlock code={comp.code} />
           </div>
         ))}
