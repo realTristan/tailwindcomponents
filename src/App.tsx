@@ -99,7 +99,9 @@ function App() {
                 {comp.path}
               </a>
             </div>
-            <div className="m-6" dangerouslySetInnerHTML={{ __html: comp.code }} />
+            <div className="m-6">
+              <div dangerouslySetInnerHTML={{ __html: comp.code }}/>
+            </div>
             <CodeBlock code={comp.code} />
           </div>
         ))}
