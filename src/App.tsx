@@ -99,27 +99,27 @@ function App() {
   // Return the components
   // <img src={comp.image} alt={comp.name} />
   return (
-    <div className="App">
-      <div className="flex flex-col items-center">
-        {comps.map((comp: any) => (
-          <div key={comp.key}>
-            <div className="p-4 mt-10 border-2 border-slate-950 border-b-0 bg-gray-800">
-              <a
-                href={comp.html_url}
-                className="text-2xl font-black uppercase tracking-widest text-white"
-              >
-                {comp.name}
-              </a>
-            </div>
+    <div className="flex flex-col justify-center items-center">
+      {comps.map((comp: any) => (
+        <div key={comp.key} className="w-1/2">
+          <div className="p-4 mt-10 border-2 border-slate-950 border-b-0 bg-gray-800">
+            <a
+              href={comp.html_url}
+              className="text-2xl font-black uppercase tracking-widest text-white"
+            >
+              {comp.name}
+            </a>
+          </div>
+          <div className="relative w-full h-full">
             <iframe
               srcDoc={wrapCode(comp.code)}
-              className="flex justify-center items-center w-full h-96 border-2 border-slate-950 pt-14 overflow-auto"
+              className="w-full h-96 border-2 p-4 border-slate-950 overflow-auto"
               title={comp.name}
             />
-            <CodeBlock code={comp.code} />
           </div>
-        ))}
-      </div>
+          <CodeBlock code={comp.code} />
+        </div>
+      ))}
     </div>
   );
 }
