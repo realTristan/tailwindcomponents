@@ -100,7 +100,7 @@ function App() {
                 {comp.name}
               </a>
             </div>
-            <iframe srcDoc={comp.code} className="flex w-full h-96 border-2 border-slate-950 p-6 pt-12 overflow-auto"></iframe>
+            <iframe srcDoc={comp.code} className="flex justify-center items-center w-full h-96 border-2 border-slate-950 pt-14 overflow-auto" title={comp.name} />
             <CodeBlock code={comp.code} />
           </div>
         ))}

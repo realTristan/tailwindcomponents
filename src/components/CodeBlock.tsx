@@ -10,7 +10,7 @@ export default class CodeBlock extends React.Component {
   };
   render() {
     return (
-      <code className="text-sm sm:text-base inline-flex text-center items-center space-x-4 bg-gray-800 text-white border-2 border-slate-950 border-t-0 p-4 pl-6 w-[35rem] h-auto">
+      <code className="text-sm inline-flex text-center items-center space-x-4 bg-gray-800 text-white border-2 border-slate-950 border-t-0 p-4 pl-6 w-[35rem] h-auto">
         <span className="flex gap-4">
           <span className="flex-1">
             <span className="text-white">{this.props.code}</span>
