@@ -40,7 +40,7 @@ async function getComponentsFromDirs(dirs: any[]): Promise<any[]> {
 
     // Create a new component
     const comp: any = {
-      path: dir.path,
+      name: dir.name,
       key: dir.sha,
       html_url: `${dir.html_url}/${dir.name}.html`,
       raw_url: getHtmlFromDirName(dir.name),
@@ -89,18 +89,18 @@ function App() {
   }
 
   // Return the components
-  // <img src={comp.image} alt={comp.path} />
+  // <img src={comp.image} alt={comp.name} />
   return (
     <div className="App">
       <div className="flex flex-col items-center">
         {comps.map((comp: any) => (
           <div key={comp.key}>
-            <div className="bg-gray-800 p-4 rounded-lg mt-10 mb-4">
-              <a href={comp.html_url} className="text-lg font-normal text-white">
-                {comp.path}
+            <div className="p-4 mt-10 border-2 border-slate-950 border-b-0 bg-gray-800">
+              <a href={comp.html_url} className="text-2xl font-black uppercase tracking-widest text-white">
+                {comp.name}
               </a>
             </div>
-            <div dangerouslySetInnerHTML={{ __html: comp.code }}></div>
+            <iframe srcDoc={comp.code} className="flex w-full h-96 border-2 border-slate-950 p-6 pt-12 overflow-auto"></iframe>
             <CodeBlock code={comp.code} />
           </div>
         ))}
