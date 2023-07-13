@@ -1,12 +1,11 @@
 # tailwindcomponents
 
-Make it so you can upload components via logging into GitHub then drag and drop in the files
+# Todo
+1. Use Monaco editor to see the code to the components
+2. Be able to upload, update, and delete the components
 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
 
-use Monaco editor to see the code to the components
+3. Login with github
+4. When upload image ask to take a screenshot of it before submitting
 
-be able to add, update, and delete the components
-
-login with github
-
-when upload image ask to take a screenshot of it before submitting
+# License
