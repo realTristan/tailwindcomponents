@@ -88,7 +88,6 @@ function App() {
   }
 
   // Return the components
-  // <img src={comp.image} alt={comp.path} />
   return (
     <div className="App">
       <div className="flex flex-col items-center">
@@ -99,9 +98,7 @@ function App() {
                 {comp.path}
               </a>
             </div>
-            <div className="m-6">
-              <div dangerouslySetInnerHTML={{ __html: comp.code }}/>
-            </div>
+            <img src={comp.image} alt={comp.path} />
             <CodeBlock code={comp.code} />
           </div>
         ))}
