@@ -1,4 +1,4 @@
-# tailwindcomponents
+# tailwindcomponents ![Stars](https://img.shields.io/github/stars/realTristan/tailwindcomponents?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/tailwindcomponents?label=Watchers)
 ![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/0c4c41e0-1027-49d2-b10a-8b4e7bf2f17f)
 
 # Todo
@@ -7,7 +7,7 @@
 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
 
 3. Login with GitHub
-4. When uploading image ask to take a screenshot of it before submitting
+4. When uploading an image ask to take a screenshot of it before submitting
 
 # License
 MIT License
