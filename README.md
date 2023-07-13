@@ -7,7 +7,6 @@
 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
 
 3. Login with GitHub
-4. When uploading an image ask to take a screenshot of it before submitting
 
 # License
 MIT License
