@@ -5,7 +5,6 @@
 # Todo
 1. Use Monaco to see the code of the components and make changes
 2. Be able to delete components
-3. Make it so only I can upload components
 
 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
 
