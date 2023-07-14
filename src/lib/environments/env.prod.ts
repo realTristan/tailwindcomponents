@@ -1,6 +1,6 @@
 const env: any = {
     production: true,
-    github_client_id: "YOUR GITHUB CLIENT ID",
-    redirect_uri: "YOUR REDIRECT URI",
+    github_client_id: "Iv1.2a8798736f1f1aa0",
+    redirect_uri: "https://realtristan.github.io/tailwindcomponents",
 }
 export default env;

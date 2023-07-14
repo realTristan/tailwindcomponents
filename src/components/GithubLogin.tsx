@@ -1,7 +1,7 @@
 import React from "react";
 // @ts-ignore
 import GitHubLogin from "react-github-login";
-import env from "../lib/environments/env.dev";
+import env from "../lib/environments/env.prod";
 
 export default class GithubLogin extends React.Component {
   render() {
