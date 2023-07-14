@@ -39,10 +39,10 @@ export default class ComponentsList extends React.Component {
             </div>
             <iframe
               srcDoc={this.wrap(comp.code)}
-              className="w-full h-96 pt-4 border-2 ring-2 ring-slate-900 rounded-lg my-2"
+              className="w-full h-96 p-4 border-2 ring-2 ring-slate-900 rounded-lg my-2"
               title={comp.name}
             />
-            <code className="text-sm inline-flex text-center items-center space-x-4 border-2 rounded-lg ring-2 ring-slate-900 p-4 pl-6 h-auto">
+            <code className="flex items-center justify-center space-x-4 border-2 rounded-lg ring-2 ring-slate-900 p-4 pl-6 h-auto text-sm text-center">
               <span className="flex gap-4">
                 <span className="flex-1">
                   <div className="text-slate-900 outline-none" contentEditable>{comp.code}</div>
