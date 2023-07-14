@@ -18,49 +18,38 @@ export default class ComponentsList extends React.Component {
 
   render() {
     return (
-      <div className="flex flex-col items-center justify-center">
+      <div>
         {this.props.components.map((comp: any) => (
-          <div key={comp.key} className="group w-1/2 my-5 mx-5 ">
-            <div className="p-4 border-b-0 border-2 ring-2 ring-slate-900 rounded-lg">
-              <div className="flex flex-row justify-between items-center">
-                <a
-                  href={comp.html_url}
-                  className="text-2xl font-black tracking-widest text-slate-900 hover:underline underline-offset-4"
-                >
-                  {comp.name}
-                </a>
-                <button
-                  onClick={() => {}}
-                  className="text-slate-900 w-auto h-auto p-3 border-2 ring-2 ring-slate-900 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none hover:bg-slate-900 hover:text-white"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-            <iframe
-              srcDoc={this.wrap(comp.code)}
-              className="w-full h-96 p-4 border-2 ring-2 ring-slate-900 rounded-lg my-2"
-              title={comp.name}
-            />
-            <code className="flex items-center justify-center space-x-4 border-2 rounded-lg ring-2 ring-slate-900 p-4 pl-6 h-auto text-sm text-center">
-              <span className="flex gap-4">
-                <span className="flex-1">
-                  <div className="text-slate-900 outline-none" contentEditable>{comp.code}</div>
-                </span>
-              </span>
-
-              <svg
-                className="shrink-0 h-7 w-7 transition text-slate-900 hover:text-blue-600 cursor-pointer active:text-blue-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-                onClick={() => navigator.clipboard.writeText(comp.code)}
+          <div key={comp.key} className="my-6">
+            <div className="mx-5 py-4 px-4 flex flex-row justify-start rounded-lg rounded-b-none bg-white border-[1px] border-b-0 border-gray-200">
+              <a
+                href={comp.html_url}
+                target="_blank"
+                rel="noreferrer"
+                className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
               >
-                <path d="M8 2a1 1 0 000 2h2a1 1 0 100-2H8z"></path>
-                <path d="M3 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v6h-4.586l1.293-1.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L10.414 13H15v3a2 2 0 01-2 2H5a2 2 0 01-2-2V5zM15 11h2a1 1 0 110 2h-2v-2z"></path>
-              </svg>
-            </code>
+                Github
+              </a>
+              <button
+                onClick={() => navigator.clipboard.writeText(comp.code)}
+                className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
+              >
+                Copy Code
+              </button>
+              <button
+                onClick={() => {}}
+                className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
+              >
+                Delete
+              </button>
+            </div>
+            <div className="mx-5 rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200">
+              <iframe
+                srcDoc={this.wrap(comp.code)}
+                className="w-[60rem] h-96 my-10 p-4"
+                title={comp.name}
+              />
+            </div>
           </div>
         ))}
       </div>

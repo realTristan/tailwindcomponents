@@ -39,7 +39,7 @@ const getComponentsFromDirs = async (dirs: any[]): Promise<any[]> => {
       name: dir.name,
       sha: dir.sha,
       key: randomKey(),
-      html_url: `${dir.html_url}/${dir.name}.html`,
+      html_url: `${dir.html_url}/.html`,
       raw_url: toRawUrl(dir.name),
     };
 
@@ -97,7 +97,7 @@ export default function Home() {
       setUploadData(GITHUB_AUTH.uploadData());
       getComponents().then((comps) => setComps(comps));
     }
-  }, [isLoggedIn]);
+  }, [error, isLoggedIn]);
 
   // If there was an error
   if (error) return <GithubAuthError error={error} />;
@@ -111,7 +111,7 @@ export default function Home() {
       <h2 className="mt-10 mb-7 text-6xl text-slate-900 font-black">
         Tailwind Components
       </h2>
-      <p className="text-base text-slate-900 w-1/3 text-center mb-7">
+      <p className="text-base text-slate-900 w-1/2 text-center mb-7">
         This is a collection of Tailwind CSS components that I have made. Any
         custom components that I make will be uploaded here. This project was
         made with{" "}
@@ -123,7 +123,10 @@ export default function Home() {
           Tailwind CSS
         </mark>{" "}
         and is hosted on{" "}
-        <mark className="bg-transparent text-black font-bold tracking-wide">Vercel</mark>.
+        <mark className="bg-transparent text-black font-bold tracking-wide">
+          Vercel
+        </mark>
+        .
       </p>
       <Upload data={uploadData} />
       <ComponentsList components={comps} />
