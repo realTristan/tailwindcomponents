@@ -2,11 +2,12 @@
 ![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/3ee1a051-d8e8-41e1-9871-bb2e951a0988)
 
 # Todo
-1. Use Monaco to see the code of the components
-2. Be able to upload, update, and delete the components
+1. Use Monaco to see the code of the components and make changes
+2. Be able to upload components by pasting the code into a Monaco editor
+3. Be able to delete components
 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
 
-3. Login with GitHub
+4. Login with GitHub
 
 # License
 MIT License
