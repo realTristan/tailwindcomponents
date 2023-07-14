@@ -4,6 +4,7 @@ import Spinner from "./components/Spinner";
 import GithubAuth from "./lib/GithubAuth";
 import GithubAuthError from "./components/GithubAuthError";
 import ComponentsList from "./components/ComponentsList";
+import Upload from "./components/Upload";
 
 // Github Login and Authentication
 const GITHUB_AUTH: GithubAuth = new GithubAuth();
@@ -36,6 +37,7 @@ const getComponentsFromDirs = async (dirs: any[]): Promise<any[]> => {
     // Create a new component
     const comp: any = {
       name: dir.name,
+      sha: dir.sha,
       key: randomKey(),
       html_url: `${dir.html_url}/${dir.name}.html`,
       raw_url: toRawUrl(dir.name),
@@ -69,6 +71,7 @@ export default function Home() {
   const [error, setError] = useState<any>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [comps, setComps] = useState<any[]>([]);
+  const [uploadData, setUploadData] = useState<any>({});
 
   // Use effect for access to window
   useEffect(() => {
@@ -91,6 +94,7 @@ export default function Home() {
     // Check if the user is logged in
     if (GITHUB_AUTH.isLoggedIn()) {
       setIsLoggedIn(true);
+      setUploadData(GITHUB_AUTH.uploadData());
       getComponents().then((comps) => setComps(comps));
     }
   }, [isLoggedIn]);
@@ -102,5 +106,27 @@ export default function Home() {
   if (!isLoggedIn || comps.length === 0) return <Spinner />;
 
   // Return the components
-  return <ComponentsList components={comps} />;
+  return (
+    <div className="flex flex-col justify-center items-center">
+      <h2 className="mt-10 mb-7 text-6xl text-slate-900 font-black">
+        Tailwind Components
+      </h2>
+      <p className="text-base text-slate-900 w-1/3 text-center mb-7">
+        This is a collection of Tailwind CSS components that I have made. Any
+        custom components that I make will be uploaded here. This project was
+        made with{" "}
+        <mark className="bg-transparent text-yellow-400 font-bold tracking-wide">
+          Next.js
+        </mark>{" "}
+        and{" "}
+        <mark className="bg-transparent text-blue-400 font-bold tracking-wide">
+          Tailwind CSS
+        </mark>{" "}
+        and is hosted on{" "}
+        <mark className="bg-transparent text-black font-bold tracking-wide">Vercel</mark>.
+      </p>
+      <Upload data={uploadData} />
+      <ComponentsList components={comps} />
+    </div>
+  );
 }

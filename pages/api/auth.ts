@@ -5,6 +5,8 @@ const CLIENT_SECRET: string | undefined = process.env.GITHUB_CLIENT_SECRET;
 // Handle the response from the Github API
 const handleJson = (json: any) => {
   if (json.error) return { json: json, status: 500 };
+  json.expires_at = Date.now() + json.expires_in * 1000;
+  json.refresh_token_expires_at = Date.now() + json.refresh_token_expires_in * 1000;
   return { json: json, status: 200 };
 }
 

@@ -13,19 +13,30 @@ export default class GithubAuth {
 
   // Errors
   public readonly error = (): string | null => this.get("error");
-  public readonly errorDescription = (): string | null =>
-    this.get("error_description");
   public readonly errorUri = (): string | null => this.get("error_uri");
-
-  // Access
+  public readonly errorDescription = (): string | null => this.get("error_description");
+  // Code, scope, token type
   public readonly code = (): string | null => this.get("code");
   public readonly scope = (): string | null => this.get("scope");
-  public readonly expiresIn = (): string | null => this.get("expires_in");
   public readonly tokenType = (): string | null => this.get("token_type");
+  // Tokens
   public readonly accessToken = (): string | null => this.get("access_token");
   public readonly refreshToken = (): string | null => this.get("refresh_token");
-  public readonly refreshTokenExpiresIn = (): string | null =>
-    this.get("refresh_token_expires_in");
+  // Expires in
+  public readonly expiresIn = (): string | null => this.get("expires_in");
+  public readonly refreshTokenExpiresIn = (): string | null => this.get("refresh_token_expires_in");
+  // Expires at
+  public readonly expiresAt = (): string | null => this.get("expires_at");
+  public readonly refreshTokenExpiresAt = (): string | null => this.get("refresh_token_expires_at");
+  // Upload Data
+  public readonly uploadData = (): any => {
+    return {
+      access_token: this.accessToken(),
+      refresh_token: this.refreshToken(),
+      expires_at: this.expiresAt(),
+      refresh_token_expires_at: this.refreshTokenExpiresAt(),
+    }
+  }
 
   // Open the auth window
   private readonly openAuthWindow = (): void => {
