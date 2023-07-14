@@ -1,13 +1,12 @@
 # tailwindcomponents ![Stars](https://img.shields.io/github/stars/realTristan/tailwindcomponents?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/tailwindcomponents?label=Watchers)
-![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/3ee1a051-d8e8-41e1-9871-bb2e951a0988)
+![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/11f90dbe-a212-487d-9363-db64f4c07f52)
+![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/a7ba52b9-4390-4f85-837f-afc23cbc330e)
 
 # Todo
 1. Use Monaco to see the code of the components and make changes
 2. Be able to upload components by pasting the code into a Monaco editor
 3. Be able to delete components
 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
-
-4. Login with GitHub
 
 # License
 MIT License
