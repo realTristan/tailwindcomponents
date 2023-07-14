@@ -73,7 +73,7 @@ const wrap = (code: string): string =>
 export default function Home() {
   // States
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [comps, setComps] = useState([]);
+  const [comps, setComps] = useState<any[]>([]);
 
   // Use effect for access to window
   useEffect(() => {
@@ -85,7 +85,7 @@ export default function Home() {
       setIsLoggedIn(true);
       getComponents().then((comps) => setComps(comps));
     }
-  });
+  }, [isLoggedIn]);
 
   // Check if the user is logged in or if there are no components
   if (!isLoggedIn || comps.length === 0) return <Spinner />;

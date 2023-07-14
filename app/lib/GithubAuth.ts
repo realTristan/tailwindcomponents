@@ -18,14 +18,16 @@ export default class GithubAuth {
     this.get("refresh_token_expires_in");
 
   // Open the auth window
-  private readonly openAuthWindow = (): void =>
-    (window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.CLIENT_ID}&redirect_uri=${this.REDIRECT_URI}`);
+  private readonly openAuthWindow = (): void => {
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.CLIENT_ID}&redirect_uri=${this.REDIRECT_URI}`;
+  };
 
   // Check if the user is logged in
   public readonly isLoggedIn = (): boolean => this.accessToken() !== null;
 
   // Set the url params
-  private readonly setUrlParams = (json: any): void => new Params().set(json);
+  private readonly setUrlParams = (json: any): void =>
+    new Params().setObj(json);
 
   // Get the access token
   private readonly fetchAccessToken = (code: string): void => {
@@ -39,7 +41,7 @@ export default class GithubAuth {
       }),
     })
       .then((resp) => resp.json())
-      .then((json) => setUrlParams(json))
+      .then((json) => this.setUrlParams(json))
       .catch((error) => console.log(error));
   };
 

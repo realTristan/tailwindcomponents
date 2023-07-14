@@ -3,16 +3,16 @@
 
 // Github API Variables
 const GITHUB_API_URL: string = "https://github.com/login/oauth/access_token";
-const CLIENT_SECRET: string = process.env.GITHUB_CLIENT_SECRET;
+const CLIENT_SECRET: string | undefined = process.env.GITHUB_CLIENT_SECRET;
 
 // Handle the response from the Github API
-function handleJson(json: any) {
+const handleJson = (json: any) => {
   if (json.error) return { json: json, status: 500 };
   return { json: json, status: 200 };
 }
 
 // Send a POST request to the Github API
-function fetchAccessToken(code: string, clientId: string, redirectUri: string) {
+const fetchAccessToken = async (code: string, clientId: string, redirectUri: string) => {
   return fetch(GITHUB_API_URL, {
     method: "POST",
     headers: {
