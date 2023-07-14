@@ -69,7 +69,7 @@ export default class Upload extends React.Component {
           >
             Upload
           </button>
-          <p className="text-slate-900 text-center font-semibold">
+          <p className="text-slate-900 text-sm mt-3 ml-4">
             {this.state.status}
           </p>
         </div>
