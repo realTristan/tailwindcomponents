@@ -7,8 +7,6 @@
 3. Be able to delete components
 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
 
-4. Login with GitHub
-
 # License
 MIT License
 
