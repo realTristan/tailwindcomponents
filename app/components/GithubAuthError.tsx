@@ -6,7 +6,7 @@ export default class GithubAuthError extends React.Component {
     this.props = props || {};
   }
   props: any = {
-    github_auth: null,
+    error: null,
   };
   render() {
     return (
@@ -15,10 +15,10 @@ export default class GithubAuthError extends React.Component {
           className="text-2xl font-black
           uppercase tracking-widest text-slate-900"
         >
-          {this.props.github_auth.error()}
+          {this.props.error.message}
         </h2>
         <p className="text-xl text-slate-900">
-          {this.props.github_auth.errorDescription()}
+          {this.props.error.description}
         </p>
         <div className="flex flex-row">
           <a
@@ -28,7 +28,7 @@ export default class GithubAuthError extends React.Component {
             Try again
           </a>
           <a
-            href={this.props.github_auth.errorUri() || "#"}
+            href={this.props.error.uri || "#"}
             className="text-white py-2 px-6 m-4 bg-slate-900 rounded-full hover:bg-white hover:text-slate-900 hover:shadow-lg"
             target="_blank"
             rel="noopener noreferrer"

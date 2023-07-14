@@ -65,14 +65,23 @@ const getComponents = () =>
 
 // The main app
 export default function Home() {
-  // States
+  // Error, is logged in, and components states
+  const [error, setError] = useState<any>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [comps, setComps] = useState<any[]>([]);
 
   // Use effect for access to window
   useEffect(() => {
-    // Check if the user is logged in or if there was an error
-    if (isLoggedIn || GITHUB_AUTH.errorOccurred()) return;
+    // Check if there was an error
+    if (GITHUB_AUTH.errorOccurred())
+      setError({
+        message: GITHUB_AUTH.error(),
+        description: GITHUB_AUTH.errorDescription(),
+        uri: GITHUB_AUTH.errorUri(),
+      });
+
+    // If the user is logged in or there was an error
+    if (isLoggedIn || error) return;
 
     // Login to github
     GITHUB_AUTH.login();
@@ -85,8 +94,7 @@ export default function Home() {
   }, [isLoggedIn]);
 
   // If there was an error
-  if (GITHUB_AUTH.errorOccurred())
-    return <GithubAuthError github_auth={GITHUB_AUTH} />;
+  if (error) return <GithubAuthError error={error} />;
 
   // Check if the user is logged in or if there are no components
   if (!isLoggedIn || comps.length === 0) return <Spinner />;
