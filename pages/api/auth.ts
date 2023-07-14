@@ -1,6 +1,3 @@
-// NextJS Server
-// https://nextjs.org/docs/api-routes/introduction
-
 // Github API Variables
 const GITHUB_API_URL: string = "https://github.com/login/oauth/access_token";
 const CLIENT_SECRET: string | undefined = process.env.GITHUB_CLIENT_SECRET;

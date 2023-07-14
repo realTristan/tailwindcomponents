@@ -2,8 +2,10 @@ import Params from "./Params";
 
 export default class GithubAuth {
   private readonly CLIENT_ID: string = "Iv1.2a8798736f1f1aa0";
-  private readonly HOME_URI: string =
-    "https://tailwindcomponents-gules.vercel.app";
+  private readonly IS_PRODUCTION: boolean = false;
+  private readonly HOME_URI: string = this.IS_PRODUCTION
+    ? "https://tailwindcomponents-gules.vercel.app"
+    : "http://localhost:3000";
 
   // Get values from the url params
   private get = (value: string): string | null =>
@@ -11,7 +13,8 @@ export default class GithubAuth {
 
   // Errors
   public readonly error = (): string | null => this.get("error");
-  public readonly errorDescription = (): string | null => this.get("error_description");
+  public readonly errorDescription = (): string | null =>
+    this.get("error_description");
   public readonly errorUri = (): string | null => this.get("error_uri");
 
   // Access
@@ -34,7 +37,7 @@ export default class GithubAuth {
   public readonly errorOccurred = (): boolean => this.error() !== null;
 
   // Set the url params
-  private readonly setUrlParams = (json: any): void => new Params().set(json);
+  private readonly setUrlParams = (json: any): void => Params.set(json);
 
   // Get the access token
   private readonly fetchAccessToken = (code: string): void => {

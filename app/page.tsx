@@ -1,8 +1,9 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Spinner from "./components/Spinner";
-import CodeBlock from "./components/CodeBlock";
 import GithubAuth from "./lib/GithubAuth";
+import GithubAuthError from "./components/GithubAuthError";
+import ComponentsList from "./components/ComponentsList";
 
 // Github Login and Authentication
 const GITHUB_AUTH: GithubAuth = new GithubAuth();
@@ -62,13 +63,6 @@ const getDirs = (): Promise<any> =>
 const getComponents = () =>
   getDirs().then((dirs) => getComponentsFromDirs(dirs).then((comps) => comps));
 
-// Wrap the code so that tailwind will render
-const wrap = (code: string): string =>
-  `<!doctype html><html><head><meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    </head><body>${code}</body></html>`;
-
 // The main app
 export default function Home() {
   // States
@@ -90,32 +84,13 @@ export default function Home() {
     }
   }, [isLoggedIn]);
 
+  // If there was an error
+  if (GITHUB_AUTH.errorOccurred())
+    return <GithubAuthError github_auth={GITHUB_AUTH} />;
+
   // Check if the user is logged in or if there are no components
   if (!isLoggedIn || comps.length === 0) return <Spinner />;
 
   // Return the components
-  return (
-    <div className="flex flex-col justify-center items-center">
-      {comps.map((comp: any) => (
-        <div key={comp.key} className="w-1/2 my-5 mx-5 ">
-          <div className="p-4 border-2 border-slate-950 border-b-0 bg-gray-800">
-            <a
-              href={comp.html_url}
-              className="text-2xl font-black uppercase tracking-widest text-white"
-            >
-              {comp.name}
-            </a>
-          </div>
-          <div className="relative w-full h-full">
-            <iframe
-              srcDoc={wrap(comp.code)}
-              className="w-full h-96 border-2 p-4 border-slate-950 overflow-auto"
-              title={comp.name}
-            />
-          </div>
-          <CodeBlock code={comp.code} />
-        </div>
-      ))}
-    </div>
-  );
+  return <ComponentsList components={comps} />;
 }
