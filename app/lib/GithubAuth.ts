@@ -1,80 +1,56 @@
-import env from "./environments/env.dev";
+import Params from "./Params";
 
 export default class GithubAuth {
-  private readonly CLIENT_ID: string = env.github_client_id;
-  private readonly REDIRECT_URI: string = env.github_redirect_uri;
-  private readonly CLIENT_SECRET: string = env.github_client_secret;
+  private readonly CLIENT_ID: string = "Iv1.2a8798736f1f1aa0";
+  private readonly REDIRECT_URI: string = "http://localhost:3000";
 
-  // Send a login request
-  public openAuthRequest(): void {
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.CLIENT_ID}&redirect_uri=${this.REDIRECT_URI}`;
-  }
+  // Get values from the url params
+  private get = (value: string): string | null =>
+    new URLSearchParams(window.location.search).get(value);
 
-  // Get the auth code from the url
-  public getCodeFromUrl(): string | null {
-    const url: URL = new URL(window.location.href);
-    return url.searchParams.get("code");
-  }
+  public readonly scope = (): string | null => this.get("scope");
+  public readonly authCode = (): string | null => this.get("code");
+  public readonly expiresIn = (): string | null => this.get("expires_in");
+  public readonly tokenType = (): string | null => this.get("token_type");
+  public readonly accessToken = (): string | null => this.get("access_token");
+  public readonly refreshToken = (): string | null => this.get("refresh_token");
+  public readonly refreshTokenExpiresIn = (): string | null =>
+    this.get("refresh_token_expires_in");
 
-  // Get the access token from the url
-  public getAccessTokenFromUrl(): string | null {
-    const url: URL = new URL(window.location.href);
-    return url.searchParams.get("access_token");
-  }
-
-  // Check if the user is logged in
-  public codeInUrl(): boolean {
-    return this.getCodeFromUrl() !== null;
-  }
-
-  // Check if the access token is in the url
-  public accessTokenInUrl(): boolean {
-    return this.getAccessTokenFromUrl() !== null;
-  }
+  // Open the auth window
+  private readonly openAuthWindow = (): void =>
+    (window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.CLIENT_ID}&redirect_uri=${this.REDIRECT_URI}`);
 
   // Check if the user is logged in
-  public isLoggedIn(): boolean {
-    return this.accessTokenInUrl() && this.codeInUrl();
-  }
+  public readonly isLoggedIn = (): boolean => this.accessToken() !== null;
 
-  // Add the access token to the url
-  public openAccessTokenRequest(accessToken: string): void {
-    const url: URL = new URL(window.location.href);
-    url.searchParams.set("access_token", accessToken);
-    window.location.href = url.href;
-  }
+  // Set the url params
+  private readonly setUrlParams = (json: any): void => new Params().set(json);
 
   // Get the access token
-  public fetchAccessToken(code: string): void {
+  private readonly fetchAccessToken = (code: string): void => {
     fetch("http://localhost:3000/api/auth", {
       method: "POST",
-      body: {
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
         code: code,
         client_id: this.CLIENT_ID,
         redirect_uri: this.REDIRECT_URI,
-      },
+      }),
     })
       .then((resp) => resp.json())
-      .then((json) => this.openAccessTokenRequest(json.access_token))
-      .catch((error) => console.error(error));
-  }
+      .then((json) => setUrlParams(json))
+      .catch((error) => console.log(error));
+  };
 
   // Main login function
   public login(): void {
-    // Check if the access token is in the url
-    if (this.accessTokenInUrl()) {
-      return;
-    }
+    if (this.isLoggedIn()) return;
 
-    // If the user is not logged in, send a login request
-    if (!this.codeInUrl()) {
-      this.openAuthRequest();
-    }
+    let auth_code: string | null = this.authCode();
 
-    // Get the access token
-    let code: string | null = this.getCodeFromUrl();
-    if (code !== null) {
-      this.fetchAccessToken(code);
-    }
+    if (auth_code === null) this.openAuthWindow();
+
+    if (auth_code !== null) this.fetchAccessToken(auth_code);
   }
 }

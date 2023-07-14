@@ -17,7 +17,6 @@ testing.py
 /build
 
 # env
-/app/lib/environments/env.dev.ts
 .env
 
 # misc
