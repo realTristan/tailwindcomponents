@@ -101,8 +101,10 @@ export default function Home() {
   // Login with github
   useEffect(() => {
     auth.login();
-    setIsLoggedIn(true);
-    getComponents(setComps);
+    if (auth.isLoggedIn()) {
+      setIsLoggedIn(true);
+      getComponents(setComps);
+    }
   }, []);
 
   // Check if the user is logged in or if there are no components
