@@ -78,7 +78,7 @@ export default function Home() {
   // Use effect for access to window
   useEffect(() => {
     // Check if the user is logged in or if there was an error
-    if (isLoggedIn || !GITHUB_AUTH.errorOccurred()) return;
+    if (isLoggedIn || GITHUB_AUTH.errorOccurred()) return;
 
     // Login to github
     GITHUB_AUTH.login();
