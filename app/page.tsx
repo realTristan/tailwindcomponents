@@ -25,6 +25,11 @@ function isValidDir(dir: any): boolean {
   return dir.type === "dir";
 }
 
+// Generate a random key
+function randomKey(): string {
+  return Math.random().toString(36).substring(7);
+}
+
 // Get the components from the dirs
 async function getComponentsFromDirs(dirs: any[]): Promise<any[]> {
   // The components
@@ -42,7 +47,7 @@ async function getComponentsFromDirs(dirs: any[]): Promise<any[]> {
     // Create a new component
     const comp: any = {
       name: dir.name,
-      key: dir.sha,
+      key: randomKey(),
       html_url: `${dir.html_url}/${dir.name}.html`,
       raw_url: getHtmlFromDirName(dir.name),
       // image: getImageFromDirName(dir.name),
@@ -108,8 +113,8 @@ export default function Home() {
   return (
     <div className="flex flex-col justify-center items-center">
       {comps.map((comp: any) => (
-        <div key={comp.key} className="w-1/2">
-          <div className="p-4 mt-10 border-2 border-slate-950 border-b-0 bg-gray-800">
+        <div key={comp.key} className="w-1/2 my-5 mx-5 ">
+          <div className="p-4 border-2 border-slate-950 border-b-0 bg-gray-800">
             <a
               href={comp.html_url}
               className="text-2xl font-black uppercase tracking-widest text-white"
