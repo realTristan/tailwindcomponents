@@ -5,63 +5,59 @@
 const GITHUB_API_URL: string = "https://github.com/login/oauth/access_token";
 const CLIENT_SECRET: string = process.env.GITHUB_CLIENT_SECRET;
 
-// Get the code from the request headers
+// Get the code from the request body
 function getCode(req: any, res: any): string | null {
-  const code: string | null = req.headers.code;
+  const code: string | null = req.body.code;
   if (!code) {
-    res.status(400).json({ message: "Code not present in headers" });
+    res.status(400).json({ message: "Code not present in body" });
     return null;
   }
   return code;
 }
 
-// Get the client ID from the request headers
+// Get the client ID from the request body
 function getClientId(req: any, res: any): string | null {
-  const clientId: string | null = req.headers.client_id;
+  const clientId: string | null = req.body.client_id;
   if (!clientId) {
-    res.status(400).json({ message: "Client ID not present in headers" });
+    res.status(400).json({ message: "Client ID not present in body" });
     return null;
   }
   return clientId;
 }
 
-// Get the redirect URI from the request headers
+// Get the redirect URI from the request body
 function getRedirectUri(req: any, res: any): string | null {
-  const redirectUri: string | null = req.headers.redirect_uri;
+  const redirectUri: string | null = req.body.redirect_uri;
   if (!redirectUri) {
-    res.status(400).json({ message: "Redirect URI not present in headers" });
+    res.status(400).json({ message: "Redirect URI not present in body" });
     return null;
   }
   return redirectUri;
 }
 
 // Send a POST request to the Github API
-function getAccessToken(code: string, clientId: string, redirectUri: string) {
-  // Set the request body
-  const body: string = JSON.stringify({
-    client_id: clientId,
-    client_secret: CLIENT_SECRET,
-    code: code,
-    redirect_uri: redirectUri,
-  });
-
-  // Set the headers
-  const headers: any = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-  };
-  
-  // Send a POST request to the Github API
-  const response: any = fetch(GITHUB_API_URL, {
+function fetchAccessToken(code: string, clientId: string, redirectUri: string) {
+  return fetch(GITHUB_API_URL, {
     method: "POST",
-    headers: headers,
-    body: body,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: {
+      client_id: clientId,
+      client_secret: CLIENT_SECRET,
+      code: code,
+      redirect_uri: redirectUri,
+    },
   })
     .then((res) => res.json())
-    .then((json) => json.access_token);
-
-  // Return the response from Github
-  return response;
+    .then((json) => {
+      return {
+        client_secret: CLIENT_SECRET,
+        code: code,
+        redirect_uri: redirectUri,
+        access_token: json.access_token,
+      };
+    });
 }
 
 // Endpoint handler
@@ -71,21 +67,21 @@ export default function handler(req: any, res: any) {
     return;
   }
 
-  // Get the code from the request headers
+  // Get the code from the request body
   const code: string | null = getCode(req, res);
   if (!code) return;
 
-  // Get the client ID from the request headers
+  // Get the client ID from the request body
   const clientId: string | null = getClientId(req, res);
   if (!clientId) return;
 
-  // Get the redirect URI from the request headers
+  // Get the redirect URI from the request body
   const redirectUri: string | null = getRedirectUri(req, res);
   if (!redirectUri) return;
 
   // Send a POST request to the Github API
-  const accessToken: string = getAccessToken(code, clientId, redirectUri);
+  const resp: any = fetchAccessToken(code, clientId, redirectUri);
 
   // Return the access token
-  res.status(200).json({ access_token: accessToken });
+  res.status(200).json(resp);
 }
