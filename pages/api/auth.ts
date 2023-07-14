@@ -3,7 +3,7 @@
 
 // Github API Variables
 const GITHUB_API_URL: string = "https://github.com/login/oauth/access_token";
-const CLIENT_SECRET: string = "";
+const CLIENT_SECRET: string = process.env.GITHUB_CLIENT_SECRET;
 
 // Get the code from the request headers
 function getCode(req: any, res: any): string | null {
@@ -48,7 +48,7 @@ function getAccessToken(code: string, clientId: string, redirectUri: string) {
   // Set the headers
   const headers: any = {
     "Content-Type": "application/json",
-    Accept: "application/json",
+    "Accept": "application/json",
   };
   
   // Send a POST request to the Github API

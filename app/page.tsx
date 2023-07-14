@@ -88,25 +88,20 @@ function wrapCode(code: string): string {
 export default function Home() {
   // The github auth
   const auth: GithubAuth = new GithubAuth();
+
+  // States
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // Login with github
-  React.useEffect(() => {
-    auth.login();
-    setIsLoggedIn(auth.isLoggedIn());
-  }, []);
-
-  // Check if the user is logged in
-  if (!auth.isLoggedIn()) return <Spinner />;
-
-  // State for the components
   const [comps, setComps] = useState([]);
 
-  // Get the components
-  useEffect(() => getComponents(setComps), []);
+  // Login with github
+  useEffect(() => {
+    auth.login();
+    setIsLoggedIn(true);
+    getComponents(setComps);
+  }, []);
 
-  // Spinner while waiting for the components and the code to load
-  if (comps.length === 0) return <Spinner />;
+  // Check if the user is logged in or if there are no components
+  if (!isLoggedIn || comps.length === 0) return <Spinner />;
 
   // Return the components
   // <img src={comp.image} alt={comp.name} />
