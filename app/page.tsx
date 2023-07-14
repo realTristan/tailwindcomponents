@@ -1,9 +1,8 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import Spinner from "./components/Spinner";
 import CodeBlock from "./components/CodeBlock";
-//import GithubLogin from "./components/GithubLogin";
 import GithubAuth from "./lib/GithubAuth";
-import "./App.css";
 
 // Read the component from the url
 function readComponent(url: string): Promise<string> {
@@ -86,7 +85,20 @@ function wrapCode(code: string): string {
 }
 
 // The main app
-export default function App() {
+export default function Home() {
+  // The github auth
+  const auth: GithubAuth = new GithubAuth();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Login with github
+  React.useEffect(() => {
+    auth.login();
+    setIsLoggedIn(auth.isLoggedIn());
+  }, []);
+
+  // Check if the user is logged in
+  if (!auth.isLoggedIn()) return <Spinner />;
+
   // State for the components
   const [comps, setComps] = useState([]);
 
@@ -95,9 +107,6 @@ export default function App() {
 
   // Spinner while waiting for the components and the code to load
   if (comps.length === 0) return <Spinner />;
-
-  // Login with github
-  new GithubAuth().login();
 
   // Return the components
   // <img src={comp.image} alt={comp.name} />

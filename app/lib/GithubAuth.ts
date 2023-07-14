@@ -9,8 +9,11 @@ export default class GithubAuth {
         method: "GET",
     }
     private readonly ACCESS_TOKEN_REQUEST: any = {
-        url: "https://github.com/login/oauth/access_token",
+        url: "http://localhost:3000/api/auth",
         method: "POST",
+        headers: {
+            "Accept": "application/json"
+        },
     }
 
     // Send a login request
@@ -43,6 +46,11 @@ export default class GithubAuth {
         return this.getAccessTokenFromUrl() !== null;
     }
 
+    // Check if the user is logged in
+    public isLoggedIn(): boolean {
+        return this.accessTokenInUrl() && this.codeInUrl();
+    }
+
     // Add the access token to the url
     public openAccessTokenRequest(accessToken: string): void {
         const url = new URL(window.location.href);
@@ -53,15 +61,15 @@ export default class GithubAuth {
     // Get the access token
     public getAccessToken(code: string): void {
         const request = this.ACCESS_TOKEN_REQUEST;
-        request.url += `?client_id=${this.CLIENT_ID}`;
-        request.url += `&redirect_uri=${this.REDIRECT_URI}`;
-        request.url += `&client_secret=${this.CLIENT_SECRET}`;
-        request.url += `&code=${code}`;
+        const body: string = JSON.stringify({
+            code: code,
+            client_id: this.CLIENT_ID,
+            redirect_uri: this.REDIRECT_URI,
+        });
         fetch(request.url, {
             method: request.method,
-            headers: {
-                "Accept": "application/json"
-            },
+            headers: request.headers,
+            body: body,
         })
         .then(response => response.json())
         .then(json => {
