@@ -12,13 +12,18 @@ export default class Params {
         return params.slice(0, -1);
     }
 
+    // Set the window location
+    public setWindowLocation = (): void => {
+        window.location.search = this.toString();
+    }
+
     // Get a param
     public get = (value: string): string | null => this.params[value] || null;
 
     // Delete a param
     public delete = (key: string): void => {
         delete this.params[key];
-        window.location.search = this.toString();
+        this.setWindowLocation();
     }
 
     // Set a param
@@ -31,11 +36,6 @@ export default class Params {
         } else if (typeof key === "string") {
             this.params[key] = value;
         }
-        window.location.search = this.toString();
-    }
-
-    // Set the window location
-    public setWindowLocation = (): void => {
-        window.location.search = this.toString();
+        this.setWindowLocation();
     }
 }
