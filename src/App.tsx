@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Spinner from "./components/Spinner";
 import CodeBlock from "./components/CodeBlock";
-import GithubLogin from "./components/GithubLogin";
+//import GithubLogin from "./components/GithubLogin";
+import GithubAuth from "./lib/GithubAuth";
 import "./App.css";
 
 // Read the component from the url
@@ -93,15 +94,15 @@ export default function App() {
   useEffect(() => getComponents(setComps), []);
 
   // Spinner while waiting for the components and the code to load
-  if (comps.length === 0) {
-    return <Spinner />;
-  }
+  if (comps.length === 0) return <Spinner />;
+
+  // Login with github
+  new GithubAuth().login();
 
   // Return the components
   // <img src={comp.image} alt={comp.name} />
   return (
     <div className="flex flex-col justify-center items-center">
-      <GithubLogin />
       {comps.map((comp: any) => (
         <div key={comp.key} className="w-1/2">
           <div className="p-4 mt-10 border-2 border-slate-950 border-b-0 bg-gray-800">
