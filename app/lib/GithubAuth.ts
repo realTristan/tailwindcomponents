@@ -2,7 +2,7 @@ import Params from "./Params";
 
 export default class GithubAuth {
   private readonly CLIENT_ID: string = "Iv1.2a8798736f1f1aa0";
-  private readonly REDIRECT_URI: string = "http://localhost:3000";
+  private readonly HOME_URL: string = "https://tailwindcomponents-gules.vercel.app";
 
   // Get values from the url params
   private get = (value: string): string | null =>
@@ -19,7 +19,7 @@ export default class GithubAuth {
 
   // Open the auth window
   private readonly openAuthWindow = (): void => {
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.CLIENT_ID}&redirect_uri=${this.REDIRECT_URI}`;
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.CLIENT_ID}&redirect_uri=${this.HOME_URL}`;
   };
 
   // Check if the user is logged in
@@ -31,13 +31,13 @@ export default class GithubAuth {
 
   // Get the access token
   private readonly fetchAccessToken = (code: string): void => {
-    fetch("http://localhost:3000/api/auth", {
+    fetch(`${this.HOME_URL}/api/auth`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         code: code,
         client_id: this.CLIENT_ID,
-        redirect_uri: this.REDIRECT_URI,
+        redirect_uri: this.HOME_URL,
       }),
     })
       .then((resp) => resp.json())
