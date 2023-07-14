@@ -63,7 +63,7 @@ export default function handler(req: any, res: any) {
   }
 
   // Send a POST request to the Github API
-  const resp: any = fetchAccessToken(code, clientId, redirectUri).then((resp) =>
+  fetchAccessToken(code, clientId, redirectUri).then((resp) =>
     res.status(resp.status).json(resp.json)
   );
 }

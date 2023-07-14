@@ -2,14 +2,21 @@ import Params from "./Params";
 
 export default class GithubAuth {
   private readonly CLIENT_ID: string = "Iv1.2a8798736f1f1aa0";
-  private readonly HOME_URL: string = "https://tailwindcomponents-gules.vercel.app";
+  private readonly HOME_URI: string =
+    "https://tailwindcomponents-gules.vercel.app";
 
   // Get values from the url params
   private get = (value: string): string | null =>
     new URLSearchParams(window.location.search).get(value);
 
+  // Errors
+  public readonly error = (): string | null => this.get("error");
+  public readonly errorDescription = (): string | null => this.get("error_description");
+  public readonly errorUri = (): string | null => this.get("error_uri");
+
+  // Access
+  public readonly code = (): string | null => this.get("code");
   public readonly scope = (): string | null => this.get("scope");
-  public readonly authCode = (): string | null => this.get("code");
   public readonly expiresIn = (): string | null => this.get("expires_in");
   public readonly tokenType = (): string | null => this.get("token_type");
   public readonly accessToken = (): string | null => this.get("access_token");
@@ -19,25 +26,25 @@ export default class GithubAuth {
 
   // Open the auth window
   private readonly openAuthWindow = (): void => {
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.CLIENT_ID}&redirect_uri=${this.HOME_URL}`;
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.CLIENT_ID}&redirect_uri=${this.HOME_URI}`;
   };
 
   // Check if the user is logged in
   public readonly isLoggedIn = (): boolean => this.accessToken() !== null;
+  public readonly errorOccurred = (): boolean => this.error() !== null;
 
   // Set the url params
-  private readonly setUrlParams = (json: any): void =>
-    new Params().setObj(json);
+  private readonly setUrlParams = (json: any): void => new Params().set(json);
 
   // Get the access token
   private readonly fetchAccessToken = (code: string): void => {
-    fetch(`${this.HOME_URL}/api/auth`, {
+    fetch(`${this.HOME_URI}/api/auth`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         code: code,
         client_id: this.CLIENT_ID,
-        redirect_uri: this.HOME_URL,
+        redirect_uri: this.HOME_URI,
       }),
     })
       .then((resp) => resp.json())
@@ -49,10 +56,10 @@ export default class GithubAuth {
   public login(): void {
     if (this.isLoggedIn()) return;
 
-    let auth_code: string | null = this.authCode();
+    let code: string | null = this.code();
 
-    if (auth_code === null) this.openAuthWindow();
+    if (code === null) this.openAuthWindow();
 
-    if (auth_code !== null) this.fetchAccessToken(auth_code);
+    if (code !== null) this.fetchAccessToken(code);
   }
 }
