@@ -11,22 +11,24 @@ export default class GithubAuthError extends React.Component {
   render() {
     return (
       <div className="flex flex-col justify-center items-center mt-20">
-        <h2 className="text-2xl font-black uppercase tracking-widest text-slate-900">
+        <h2 className="text-4xl font-black tracking-widest text-slate-900">
           {this.props.error.message}
         </h2>
-        <p className="text-xl text-slate-900">{this.props.error.description}</p>
-        <div className="flex flex-row">
+        <p className="text-md text-slate-900 mt-3">
+          {this.props.error.description}
+        </p>
+        <div className="flex flex-row mt-6 space-x-4">
           <a
             href="/"
-            className="text-white py-2 px-6 m-4 bg-slate-900 rounded-full hover:bg-white hover:text-slate-900 hover:shadow-lg"
+            className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
           >
             Try again
           </a>
           <a
             href={this.props.error.uri || "#"}
-            className="text-white py-2 px-6 m-4 bg-slate-900 rounded-full hover:bg-white hover:text-slate-900 hover:shadow-lg"
             target="_blank"
             rel="noopener noreferrer"
+            className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
           >
             Visit Error URI
           </a>

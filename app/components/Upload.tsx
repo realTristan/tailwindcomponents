@@ -55,30 +55,28 @@ export default class Upload extends React.Component {
   // Render the component
   render() {
     return (
-      <div>
-        <div className="flex flex-row justify-center items-center space-x-3">
-          <button
-            onClick={() => this.uploadComponent()}
-            className="text-slate-900 w-auto h-auto p-3 border-2 ring-2 ring-slate-900 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none hover:bg-slate-900 hover:text-white"
-          >
-            Upload
-          </button>
+      <div className="my-6">
+        <div className="mx-5 py-4 px-4 flex flex-row justify-start rounded-lg rounded-b-none bg-white border-[1px] border-b-0 border-gray-200">
           <input
             onChange={(e) => this.setState({ component_name: e.target.value })}
             type="text"
-            id="component-name"
             placeholder="Component Name"
-            className="text-slate-900 p-3 m-3 border-2 ring-2 ring-slate-900 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none"
+            className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
           />
+          <button
+            onClick={() => this.uploadComponent()}
+            className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
+          >
+            Upload
+          </button>
+          <p className="text-slate-900 text-sm mt-3 ml-4">
+            {this.state.status}
+          </p>
         </div>
-        <p className="text-slate-900 text-center font-semibold">
-          {this.state.status}
-        </p>
         <textarea
-          onChange={(e) => this.setState({ component_content: e.target.value })}
-          id="component-content"
           placeholder="Component Content"
-          className="text-slate-900 w-96 h-96 p-3 m-3 border-2 ring-2 ring-slate-900 rounded-lg focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          onChange={(e) => this.setState({ component_content: e.target.value })}
+          className="p-4 mx-5 w-[60rem] min-h-full rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200 text-slate-900 text-sm outline-none"
         />
       </div>
     );
