@@ -2,8 +2,7 @@
 ![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/e1104a05-0482-49ed-9722-6d597e9198fa)
 
 # Todo
-1. Use Monaco to see the code of the components and make changes
-2. Be able to delete components
+1. Be able to delete components
 
 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
 
