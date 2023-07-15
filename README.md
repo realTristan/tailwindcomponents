@@ -3,6 +3,8 @@
 
 # Todo
 1. Be able to delete components
+2. Append to components when add a new one
+3. Pop from components when delete one
 
 https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
 
