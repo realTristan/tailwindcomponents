@@ -2,7 +2,7 @@ import Params from "./Params";
 
 export default class GithubAuth {
   private readonly CLIENT_ID: string = "Iv1.2a8798736f1f1aa0";
-  private readonly IS_PRODUCTION: boolean = true;
+  private readonly IS_PRODUCTION: boolean = false;
   private readonly HOME_URI: string = this.IS_PRODUCTION
     ? "https://tailwindcomponents-gules.vercel.app"
     : "http://localhost:3000"; 

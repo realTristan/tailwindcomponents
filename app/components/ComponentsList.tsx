@@ -43,16 +43,15 @@ export default class ComponentsList extends React.Component {
   // Update Component Content
   private readonly updateComponentContent = (comp: any) => {
     let file: any | undefined;
-    let file_index: number | undefined;
     for (let i = 0; i < comp.files.length; i++) {
       if (comp.files[i].name.endsWith(".html")) {
         file = comp.files[i];
-        file_index = i;
         break;
       }
     }
-    
-    if (file === undefined || file_index === undefined) {
+
+    // If the file is undefined, then we can't update the component
+    if (!file) {
       this.updateComp(comp, { status: "Failed to update component" });
       return;
     }
@@ -77,8 +76,7 @@ export default class ComponentsList extends React.Component {
       .then((res) => res.json())
       .then((json) => {
         if (json.content.sha) {
-          // @ts-ignore (we already check if the file_index is undefined)
-          comp.files[file_index].sha = json.content.sha;
+          file.sha = json.content.sha;
           this.updateComp(comp, {
             status: "Component Updated",
             editing: false,
