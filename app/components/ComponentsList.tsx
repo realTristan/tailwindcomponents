@@ -31,7 +31,7 @@ export default class ComponentsList extends React.Component {
             "X-GitHub-Api-Version": "2022-11-28",
           },
           body: JSON.stringify({
-            message: "Delete Component",
+            message: `Deleted Component: ${comp.name}`,
             sha: file.sha,
           }),
         }

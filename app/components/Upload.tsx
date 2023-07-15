@@ -37,7 +37,7 @@ export default class Upload extends React.Component {
           "X-GitHub-Api-Version": "2022-11-28",
         },
         body: JSON.stringify({
-          message: "Upload Component",
+          message: `Uploaded Component: ${this.state.component_name}`,
           content: btoa(this.state.component_content),
         }),
       }
