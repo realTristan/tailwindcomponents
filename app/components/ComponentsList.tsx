@@ -1,15 +1,14 @@
 import React from "react";
 
 export default class ComponentsList extends React.Component {
+  props: any = {}
   constructor(props: any) {
     super(props);
-    this.props = props || {};
+    this.props = props || {
+      access_token: null,
+      components: [],
+    };
   }
-  props: any = {
-    access_token: null,
-    components: [],
-  };
-  state: any = {};
 
   // Wrap the content so that tailwind will render
   private readonly wrap = (content: string): string =>
@@ -48,15 +47,15 @@ export default class ComponentsList extends React.Component {
 
   // Remove a component from the list
   private readonly removeComp = (comp: any): void => {
-    let comp_index: number = this.state.components.indexOf(comp);
-    this.state.components.splice(comp_index, 1);
-    this.setState({ components: this.state.components });
+    let comp_index: number = this.props.components.indexOf(comp);
+    this.props.components.splice(comp_index, 1);
+    this.setState({ components: this.props.components });
   };
 
   // Update a component's variable
   private readonly updateComp = (comp: any, data: any): void => {
     for (const k in data) comp[k] = data[k];
-    this.setState({ components: this.state.components });
+    this.setState({ components: this.props.components });
   };
 
   // When the delete button is pressed
@@ -127,13 +126,10 @@ export default class ComponentsList extends React.Component {
 
   // Render the component
   render() {
-    // Set the state components
-    this.setState({ components: this.props.components });
-
     // Return the html component
     return (
       <div>
-        {this.state.components.map((comp: any) => (
+        {this.props.components.map((comp: any) => (
           <div key={comp.key} className="my-6">
             <div className="mx-5 py-4 px-4 flex flex-row justify-start rounded-lg rounded-b-none bg-white border-[1px] border-b-0 border-gray-200">
               {this.GithubButton(comp)}

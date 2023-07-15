@@ -1,23 +1,23 @@
 import React from "react";
 
 export default class Upload extends React.Component {
-  constructor(props: any) {
-    super(props);
-    this.props = props || {};
-  }
-  props: any = {
-    data: {
-      access_token: null,
-      refresh_token: null,
-      expires_at: null,
-      refresh_token_expires_at: null,
-    },
-  };
+  props: any = {};
   state: any = {
     status: "",
     component_name: "",
     component_content: "",
   };
+  constructor(props: any) {
+    super(props);
+    this.props = props || {
+      data: {
+        access_token: null,
+        refresh_token: null,
+        expires_at: null,
+        refresh_token_expires_at: null,
+      },
+    };
+  }
 
   // Upload the component
   private readonly uploadComponent = (): void => {
