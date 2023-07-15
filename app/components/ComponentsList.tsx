@@ -48,8 +48,8 @@ export default class ComponentsList extends React.Component {
 
   // Remove a component from the list
   private readonly removeComp = (comp: any): void => {
-    let comp_index: number = this.props.components.indexOf(comp);
-    this.props.components.splice(comp_index, 1);
+    let comp_index: number = this.state.components.indexOf(comp);
+    this.state.components.splice(comp_index, 1);
     this.setState({ components: this.state.components });
   };
 
@@ -128,7 +128,7 @@ export default class ComponentsList extends React.Component {
   // Render the component
   render() {
     // Set the state components
-    this.state.components = this.props.components;
+    this.setState({ components: this.props.components });
 
     // Return the html component
     return (
