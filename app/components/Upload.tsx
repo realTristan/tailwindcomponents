@@ -76,7 +76,7 @@ export default class Upload extends React.Component {
         <textarea
           placeholder="Component Content"
           onChange={(e) => this.setState({ component_content: e.target.value })}
-          className="p-4 mx-5 w-[60rem] min-h-full rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200 text-slate-900 text-sm outline-none"
+          className="p-4 mx-5 w-[60rem] min-h-[7rem] rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200 text-slate-900 text-sm outline-none"
         />
       </div>
     );
