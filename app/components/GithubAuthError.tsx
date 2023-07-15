@@ -11,15 +11,10 @@ export default class GithubAuthError extends React.Component {
   render() {
     return (
       <div className="flex flex-col justify-center items-center mt-20">
-        <h2
-          className="text-2xl font-black
-          uppercase tracking-widest text-slate-900"
-        >
+        <h2 className="text-2xl font-black uppercase tracking-widest text-slate-900">
           {this.props.error.message}
         </h2>
-        <p className="text-xl text-slate-900">
-          {this.props.error.description}
-        </p>
+        <p className="text-xl text-slate-900">{this.props.error.description}</p>
         <div className="flex flex-row">
           <a
             href="/"

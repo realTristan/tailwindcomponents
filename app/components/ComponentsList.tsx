@@ -45,7 +45,9 @@ export default class ComponentsList extends React.Component {
             <code className="flex items-center justify-center space-x-4 border-2 rounded-lg ring-2 ring-slate-900 p-4 pl-6 h-auto text-sm text-center">
               <span className="flex gap-4">
                 <span className="flex-1">
-                  <div className="text-slate-900 outline-none" contentEditable>{comp.code}</div>
+                  <div className="text-slate-900 outline-none" contentEditable>
+                    {comp.code}
+                  </div>
                 </span>
               </span>
 
