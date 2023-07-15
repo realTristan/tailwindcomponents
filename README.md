@@ -1,13 +1,6 @@
 # tailwindcomponents ![Stars](https://img.shields.io/github/stars/realTristan/tailwindcomponents?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/tailwindcomponents?label=Watchers)
 ![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/9167a694-49ec-409c-95b0-8130bae839eb)
 
-# Todo
-1. Be able to delete components
-2. Append to components when add a new one
-3. Pop from components when delete one
-
-https://docs.github.com/en/rest/repos/contents?apiVersion=2022-11-28
-
 # License
 MIT License
 
