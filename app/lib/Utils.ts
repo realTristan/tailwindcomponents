@@ -1,6 +1,6 @@
 export default class Utils {
   // Monaco Editor Config
-  public static readonly MONACO_CONFIG = {
+  public static readonly MONACO_CONFIG: any = {
     overviewRulerLanes: 0,
     lineHeight: 25,
     padding: {
