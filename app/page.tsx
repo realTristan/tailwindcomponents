@@ -15,13 +15,37 @@ const readComponent = (url: string): Promise<string> =>
 
 // Get the raw url from the dir name
 const toRawUrl = (dirName: string): string =>
-  `https://raw.githubusercontent.com/realTristan/tailwindcomponents/main/tailwindcomponents//${dirName}/.html`;
-
-// Check if the dir is valid
-const isValidDir = (dir: any): boolean => dir.type === "dir";
+  `https://raw.githubusercontent.com/realTristan/tailwindcomponents/main/tailwindcomponents/${dirName}/.html`;
 
 // Generate a random key
 const randomKey = (): string => Math.random().toString(36).substring(7);
+
+// Get the files from the dir
+const getDirFiles = async (url: string): Promise<any[]> => {
+  // The files
+  let files: any[] = [];
+
+  // Get the files
+  await fetch(url)
+    .then((res: any) => res.json())
+    .then((data: any) => {
+      // Loop through the files
+      for (let i = 0; i < data.length; i++) {
+        // Check if the file is valid
+        const file: any = data[i];
+        if (file.type !== "file") continue;
+
+        // Add the file
+        files.push({
+          name: file.name,
+          sha: file.sha,
+        });
+      }
+    });
+
+  // Return the files
+  return files;
+};
 
 // Get the components from the dirs
 const getComponentsFromDirs = async (dirs: any[]): Promise<any[]> => {
@@ -32,20 +56,21 @@ const getComponentsFromDirs = async (dirs: any[]): Promise<any[]> => {
   for (let i = 0; i < dirs.length; i++) {
     // Check if the dir is valid
     const dir: any = dirs[i];
-    if (!isValidDir(dir)) continue;
+    if (dir.type !== "dir") continue;
 
     // Create a new component
+    const files: any[] = await getDirFiles(dir.url);
     const comp: any = {
       name: dir.name,
-      sha: dir.sha,
+      files: files,
       key: randomKey(),
       html_url: `${dir.html_url}/.html`,
       raw_url: toRawUrl(dir.name),
     };
 
     // Read the component
-    await readComponent(comp.raw_url).then((code: string) => {
-      comp.code = code;
+    await readComponent(comp.raw_url).then((content: string) => {
+      comp.content = content;
       components.push(comp);
     });
   }
@@ -72,6 +97,7 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [comps, setComps] = useState<any[]>([]);
   const [uploadData, setUploadData] = useState<any>({});
+  const [accessToken, setAccessToken] = useState<string>("");
 
   // Use effect for access to window
   useEffect(() => {
@@ -95,6 +121,7 @@ export default function Home() {
     if (GITHUB_AUTH.isLoggedIn()) {
       setIsLoggedIn(true);
       setUploadData(GITHUB_AUTH.uploadData());
+      setAccessToken(GITHUB_AUTH.accessToken() || "");
       getComponents().then((comps) => setComps(comps));
     }
   }, [error, isLoggedIn]);
@@ -129,7 +156,7 @@ export default function Home() {
         .
       </p>
       <Upload data={uploadData} />
-      <ComponentsList components={comps} />
+      <ComponentsList components={comps} access_token={accessToken} />
     </div>
   );
 }

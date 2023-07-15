@@ -61,7 +61,7 @@ export default class Upload extends React.Component {
             onChange={(e) => this.setState({ component_name: e.target.value })}
             type="text"
             placeholder="Component Name"
-            className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
+            className="mx-1 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
           />
           <button
             onClick={() => this.uploadComponent()}
@@ -76,7 +76,7 @@ export default class Upload extends React.Component {
         <textarea
           placeholder="Component Content"
           onChange={(e) => this.setState({ component_content: e.target.value })}
-          className="p-4 mx-5 w-[60rem] min-h-[7rem] rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200 text-slate-900 text-sm outline-none"
+          className="p-6 mx-5 w-[60rem] min-h-[7rem] rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200 text-slate-900 text-sm outline-none"
         />
       </div>
     );
