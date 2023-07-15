@@ -8,6 +8,7 @@
 - [X] Copy Code
 - [X] Monaco Editor and Code Preview
 - [ ] Use Refresh Token
+- [ ] "Edit" Button, "Save Changes" Button, Monaco Editor for editing components
 
 # License
 MIT License
