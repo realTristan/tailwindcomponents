@@ -7,8 +7,8 @@
 - [X] Delete Component
 - [X] Copy Code
 - [X] Monaco Editor and Code Preview
+- [X] "Edit" Button, "Save Changes" Button, Monaco Editor for editing components
 - [ ] Use Refresh Token
-- [ ] "Edit" Button, "Save Changes" Button, Monaco Editor for editing components
 
 # License
 MIT License
