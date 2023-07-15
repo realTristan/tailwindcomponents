@@ -1,8 +1,9 @@
 import React from "react";
 import Utils from "../lib/Utils";
- 
+import Editor from "@monaco-editor/react";
+
 export default class ComponentsList extends React.Component {
-  props: any = {}
+  props: any = {};
   constructor(props: any) {
     super(props);
     this.props = props || {
@@ -39,6 +40,54 @@ export default class ComponentsList extends React.Component {
     }
   };
 
+  // Update Component Content
+  private readonly updateComponentContent = (comp: any) => {
+    let file: any, file_index: any;
+    for (let i = 0; i < comp.files.length; i++) {
+      if (comp.files[i].name.endsWith(".html")) {
+        file = comp.files[i];
+        file_index = i;
+        break;
+      }
+    }
+    console.log(file, file_index);
+    if (!file || file_index === undefined) {
+      this.updateComp(comp, { status: "Failed to update component" });
+      return;
+    }
+
+    // Update the component
+    fetch(
+      `https://api.github.com/repos/realTristan/tailwindcomponents/contents/tailwindcomponents/${comp.name}/.html`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${this.props.access_token}`,
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+        body: JSON.stringify({
+          message: `Updated Component: ${comp.name}`,
+          content: btoa(comp.content),
+          sha: file.sha,
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.content.sha) {
+          comp.files[file_index].sha = json.content.sha;
+          this.updateComp(comp, {
+            status: "Component Updated",
+            editing: false,
+            files: comp.files,
+          });
+        } else {
+          this.updateComp(comp, { status: "Failed to update component" });
+        }
+      });
+  };
+
   // Remove a component from the list
   private readonly removeComp = (comp: any): void => {
     let comp_index: number = this.props.components.indexOf(comp);
@@ -52,8 +101,8 @@ export default class ComponentsList extends React.Component {
     this.setState({ components: this.props.components });
   };
 
-  // When the delete button is pressed
-  private readonly onDeleteButtonPressed = (comp: any): void => {
+  // When the delete button is clicked
+  private readonly onDeleteButtonClicked = (comp: any): void => {
     if (comp.confirm_deletion && comp.confirm_deletion !== null) {
       this.deleteComponent(comp);
       this.updateComp(comp, {
@@ -77,6 +126,57 @@ export default class ComponentsList extends React.Component {
     </a>
   );
 
+  // On edit button clicked
+  private readonly onEditButtonClicked = (comp: any): void => {
+    if (comp.editing) {
+      this.updateComp(comp, { status: "Saving changes to component" });
+      this.updateComponentContent(comp);
+    } else {
+      this.updateComp(comp, { editing: true });
+    }
+  };
+
+  // Edit button component
+  private readonly EditButton = (comp: any): JSX.Element => (
+    <button
+      onClick={() => this.onEditButtonClicked(comp)}
+      className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
+    >
+      {comp.editing ? `Save Changes` : `Edit ${comp.name}`}
+    </button>
+  );
+
+  // Cancel Edit Button Component
+  private readonly CancelEditButton = (comp: any): JSX.Element => {
+    const state: string = comp.editing ? "block" : "hidden";
+    return (
+      <button
+        onClick={() => this.updateComp(comp, { editing: false })}
+        className={`mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200 ${state}`}
+      >
+        Cancel
+      </button>
+    );
+  };
+
+  // Monaco Editor component
+  private readonly MonacoEditor = (comp: any): JSX.Element => (
+    <Editor
+      height={comp.editing ? 200 : 0}
+      width={1000}
+      onChange={(e) => {
+        comp.content = e;
+        this.setState({ components: this.props.components });
+      }}
+      className={`mx-5 pr-10 border-[1px] border-gray-200 ${
+        comp.editing ? "block border-b-0" : "hidden"
+      }`}
+      value={comp.content}
+      defaultLanguage="html"
+      options={Utils.MONACO_CONFIG}
+    />
+  );
+
   // Copy code button component
   private readonly CopyCodeButton = (comp: any): JSX.Element => {
     const onClick = (): void => {
@@ -96,17 +196,15 @@ export default class ComponentsList extends React.Component {
   // Delete button component
   private readonly DeleteButton = (comp: any): JSX.Element => (
     <button
-      onClick={() => this.onDeleteButtonPressed(comp)}
+      onClick={() => this.onDeleteButtonClicked(comp)}
       className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
     >
-      {comp.confirm_deletion
-        ? `Confirm`
-        : `Delete ${comp.name}`}
+      {comp.confirm_deletion ? `Confirm` : `Delete ${comp.name}`}
     </button>
   );
 
-  // Cancel Button Component
-  private readonly CancelButton = (comp: any): JSX.Element => {
+  // Cancel Deletion Button Component
+  private readonly CancelDeletionButton = (comp: any): JSX.Element => {
     const state: string = comp.confirm_deletion ? "block" : "hidden";
     return (
       <button
@@ -119,28 +217,29 @@ export default class ComponentsList extends React.Component {
   };
 
   // Render the component
-  render() {
-    // Return the html component
-    return (
-      <div>
-        {this.props.components.map((comp: any) => (
-          <div key={comp.key} className="my-6">
-            <div className="mx-5 py-4 px-4 flex flex-row justify-start rounded-lg rounded-b-none bg-white border-[1px] border-b-0 border-gray-200">
-              {this.GithubButton(comp)}
-              {this.CopyCodeButton(comp)}
-              <div className="w-[1px] h-11 bg-gray-200 mx-4"></div>
-              {this.DeleteButton(comp)}
-              {this.CancelButton(comp)}
-              <p className="text-slate-900 text-sm mt-3 ml-4">{comp.status}</p>
-            </div>
-            <iframe
-              srcDoc={Utils.wrapHtml(comp.content)}
-              className="w-[60rem] h-96 pt-10 mb-10 mx-5 rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200"
-              title={comp.name}
-            />
+  render = () => (
+    <div>
+      {this.props.components.map((comp: any) => (
+        <div key={comp.key} className="mt-6 mb-10">
+          <div className="mx-5 py-4 px-4 flex flex-row justify-start rounded-lg rounded-b-none bg-white border-[1px] border-b-0 border-gray-200">
+            {this.GithubButton(comp)}
+            {this.CopyCodeButton(comp)}
+            <div className="w-[1px] h-11 bg-gray-200 mx-4"></div>
+            {this.EditButton(comp)}
+            {this.CancelEditButton(comp)}
+            <div className="w-[1px] h-11 bg-gray-200 mx-4"></div>
+            {this.DeleteButton(comp)}
+            {this.CancelDeletionButton(comp)}
+            <p className="text-slate-900 text-sm mt-3 ml-4">{comp.status}</p>
           </div>
-        ))}
-      </div>
-    );
-  }
+          {this.MonacoEditor(comp)}
+          <iframe
+            srcDoc={Utils.wrapHtml(comp.content)}
+            className="w-[60rem] h-96 pt-10 mx-5 rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200"
+            title={comp.name}
+          />
+        </div>
+      ))}
+    </div>
+  );
 }
