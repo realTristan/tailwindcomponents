@@ -6,7 +6,7 @@ export default class GithubAuth {
   private readonly HOME_URI: string = this.IS_PRODUCTION
     ? "https://tailwindcomponents-gules.vercel.app"
     : "http://localhost:3000"; 
-
+ 
   // Get values from the url params
   private get = (value: string): string | null =>
     new URLSearchParams(window.location.search).get(value);
