@@ -1,5 +1,6 @@
 # tailwindcomponents ![Stars](https://img.shields.io/github/stars/realTristan/tailwindcomponents?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/tailwindcomponents?label=Watchers)
 ![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/d4c4ae45-13b9-41ec-a035-24b6500c2334)
+![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/dd88c012-7eeb-4f26-8f14-72344680700f)
 
 # Todo
 - [X] Github Login
