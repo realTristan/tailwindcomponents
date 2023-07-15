@@ -1,6 +1,14 @@
 # tailwindcomponents ![Stars](https://img.shields.io/github/stars/realTristan/tailwindcomponents?color=brightgreen) ![Watchers](https://img.shields.io/github/watchers/realTristan/tailwindcomponents?label=Watchers)
 ![image](https://github.com/realTristan/tailwindcomponents/assets/75189508/9167a694-49ec-409c-95b0-8130bae839eb)
 
+# Todo
+- [X] Github Login
+- [X] Upload Component
+- [X] Delete Component
+- [X] Copy Code
+- [X] Monaco Editor and Code Preview
+- [ ] Use Refresh Token
+
 # License
 MIT License
 
