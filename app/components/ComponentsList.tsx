@@ -1,5 +1,6 @@
 import React from "react";
-
+import Utils from "../lib/Utils";
+ 
 export default class ComponentsList extends React.Component {
   props: any = {}
   constructor(props: any) {
@@ -9,13 +10,6 @@ export default class ComponentsList extends React.Component {
       components: [],
     };
   }
-
-  // Wrap the content so that tailwind will render
-  private readonly wrap = (content: string): string =>
-    `<!doctype html><html><head><meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    </head><body>${content}</body></html>`;
 
   // Delete the component
   private readonly deleteComponent = (comp: any): void => {
@@ -86,7 +80,7 @@ export default class ComponentsList extends React.Component {
   // Copy code button component
   private readonly CopyCodeButton = (comp: any): JSX.Element => {
     const onClick = (): void => {
-      navigator.clipboard.writeText(this.wrap(comp.content));
+      navigator.clipboard.writeText(comp.content);
       this.updateComp(comp, { status: "Copied the code to clipboard" });
     };
     return (
@@ -139,13 +133,11 @@ export default class ComponentsList extends React.Component {
               {this.CancelButton(comp)}
               <p className="text-slate-900 text-sm mt-3 ml-4">{comp.status}</p>
             </div>
-            <div className="mx-5 rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200">
-              <iframe
-                srcDoc={this.wrap(comp.content)}
-                className="w-[60rem] h-96 my-10 p-4"
-                title={comp.name}
-              />
-            </div>
+            <iframe
+              srcDoc={Utils.wrapHtml(comp.content)}
+              className="w-[60rem] h-96 pt-10 mb-10 mx-5 rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200"
+              title={comp.name}
+            />
           </div>
         ))}
       </div>

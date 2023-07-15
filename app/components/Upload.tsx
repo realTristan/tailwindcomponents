@@ -1,5 +1,25 @@
-import React from "react";
+import React, { useRef } from "react";
+import Utils from "../lib/Utils";
+import Editor from "@monaco-editor/react";
 
+// Monaco Editor Options
+const MONACO_OPTIONS: any = {
+  overviewRulerLanes: 0,
+  lineHeight: 25,
+  padding: {
+    top: 20,
+    bottom: 20,
+  },
+  scrollBeyondLastLine: false,
+  minimap: { enabled: false },
+  wordWrap: "on",
+  scrollbar: {
+    vertical: "hidden",
+    horizontal: "hidden",
+  },
+};
+
+// Upload Component
 export default class Upload extends React.Component {
   props: any = {};
   state: any = {
@@ -73,10 +93,22 @@ export default class Upload extends React.Component {
             {this.state.status}
           </p>
         </div>
-        <textarea
-          placeholder="Component Content"
-          onChange={(e) => this.setState({ component_content: e.target.value })}
-          className="p-6 mx-5 w-[60rem] min-h-[7rem] rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200 text-slate-900 text-sm outline-none"
+        <Editor
+          height={150}
+          width={1000}
+          onChange={(e) => this.setState({ component_content: e })}
+          className={`mx-5 pr-10 rounded-lg rounded-t-none border-[1px] border-gray-200 ${
+            this.state.component_content ? "border-b-0 rounded-b-none" : ""
+          }`}
+          defaultLanguage="html"
+          options={MONACO_OPTIONS}
+        />
+        <iframe
+          srcDoc={Utils.wrapHtml(this.state.component_content)}
+          className={`w-[60rem] h-96 p-8 mx-5 rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200 ${
+            this.state.component_content ? "" : "hidden"
+          }`}
+          title={this.state.component_name}
         />
       </div>
     );
