@@ -6,7 +6,7 @@ import GithubAuthError from "./components/GithubAuthError";
 import ComponentsList from "./components/ComponentsList";
 import Upload from "./components/Upload";
  
-// Github Login and Authentication
+// Github Login and Authentication Class
 const GITHUB_AUTH: GithubAuth = new GithubAuth();
 
 // Read the component from the url
@@ -17,25 +17,23 @@ const readComponent = (url: string): Promise<string> =>
 const toRawUrl = (dirName: string): string =>
   `https://raw.githubusercontent.com/realTristan/tailwindcomponents/main/tailwindcomponents/${dirName}/.html`;
 
-// Generate a random key
+// Generate a random key for the component
 const randomKey = (): string => Math.random().toString(36).substring(7);
 
 // Get the files from the dir
 const getDirFiles = async (url: string): Promise<any[]> => {
-  // The files
   let files: any[] = [];
 
-  // Get the files
+  // Get the files using the provided url.
   await fetch(url)
     .then((res: any) => res.json())
     .then((data: any) => {
-      // Loop through the files
       for (let i = 0; i < data.length; i++) {
-        // Check if the file is valid
+        // Get the file and check if it is valid
         const file: any = data[i];
         if (file.type !== "file") continue;
 
-        // Add the file
+        // Add the file to the files array
         files.push({
           name: file.name,
           sha: file.sha,
@@ -49,7 +47,6 @@ const getDirFiles = async (url: string): Promise<any[]> => {
 
 // Get the components from the dirs
 const getComponentsFromDirs = async (dirs: any[]): Promise<any[]> => {
-  // The components
   let components: any[] = [];
 
   // Loop through the dirs
@@ -58,7 +55,7 @@ const getComponentsFromDirs = async (dirs: any[]): Promise<any[]> => {
     const dir: any = dirs[i];
     if (dir.type !== "dir") continue;
 
-    // Create a new component
+    // Get the dir files and create the component
     const files: any[] = await getDirFiles(dir.url);
     const comp: any = {
       name: dir.name,
@@ -68,7 +65,7 @@ const getComponentsFromDirs = async (dirs: any[]): Promise<any[]> => {
       raw_url: toRawUrl(dir.name),
     };
 
-    // Read the component
+    // Read the component and add it to the components
     await readComponent(comp.raw_url).then((content: string) => {
       comp.content = content;
       components.push(comp);
@@ -92,7 +89,6 @@ const getComponents = () =>
 
 // The main app
 export default function Home() {
-  // Error, is logged in, and components states
   const [error, setError] = useState<any>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [comps, setComps] = useState<any[]>([]);
@@ -101,7 +97,6 @@ export default function Home() {
 
   // Use effect for access to window
   useEffect(() => {
-    // Check if there was an error
     if (GITHUB_AUTH.errorOccurred()) {
       setError({
         message: GITHUB_AUTH.error(),
@@ -111,13 +106,12 @@ export default function Home() {
       return;
     }
 
-    // If the user is logged in or there was an error
+    // Login the user with github if they are not 
+    // logged in and there is no error
     if (isLoggedIn || error) return;
-
-    // Login to github
     GITHUB_AUTH.login();
 
-    // Check if the user is logged in
+    // Once logged in..
     if (GITHUB_AUTH.isLoggedIn()) {
       setIsLoggedIn(true);
       setUploadData(GITHUB_AUTH.uploadData());

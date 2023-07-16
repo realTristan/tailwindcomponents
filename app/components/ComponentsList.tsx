@@ -1,6 +1,7 @@
 import React from "react";
-import Utils from "../lib/Utils";
+import HtmlUtils from "../utils/Html";
 import Editor from "@monaco-editor/react";
+import config from "../lib/Config";
 
 export default class ComponentsList extends React.Component {
   props: any = {};
@@ -82,9 +83,7 @@ export default class ComponentsList extends React.Component {
             editing: false,
             files: comp.files,
           });
-        } else {
-          this.updateComp(comp, { status: "Failed to update component" });
-        }
+        } else this.updateComp(comp, { status: "Failed to update component" });
       });
   };
 
@@ -101,19 +100,6 @@ export default class ComponentsList extends React.Component {
     this.setState({ components: this.props.components });
   };
 
-  // When the delete button is clicked
-  private readonly onDeleteButtonClicked = (comp: any): void => {
-    if (comp.confirm_deletion && comp.confirm_deletion !== null) {
-      this.deleteComponent(comp);
-      this.updateComp(comp, {
-        confirm_deletion: false,
-        status: "Deleting component",
-      });
-    } else {
-      this.updateComp(comp, { confirm_deletion: true });
-    }
-  };
-
   // Github button component
   private readonly GithubButton = (comp: any): JSX.Element => (
     <a
@@ -126,33 +112,33 @@ export default class ComponentsList extends React.Component {
     </a>
   );
 
-  // On edit button clicked
-  private readonly onEditButtonClicked = (comp: any): void => {
-    if (comp.editing) {
-      this.updateComp(comp, { status: "Saving changes to component" });
-      this.updateComponentContent(comp);
-    } else {
-      this.updateComp(comp, { editing: true });
-    }
-  };
-
   // Edit button component
-  private readonly EditButton = (comp: any): JSX.Element => (
-    <button
-      onClick={() => this.onEditButtonClicked(comp)}
-      className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
-    >
-      {comp.editing ? `Save Changes` : `Edit ${comp.name}`}
-    </button>
-  );
+  private readonly EditButton = (comp: any): JSX.Element => {
+    const onClick = (comp: any): void => {
+      if (comp.editing) {
+        this.updateComp(comp, { status: "Saving changes to component" });
+        this.updateComponentContent(comp);
+      } else this.updateComp(comp, { editing: true });
+    };
+
+    return (
+      <button
+        onClick={() => onClick(comp)}
+        className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
+      >
+        {comp.editing ? `Save Changes` : `Edit ${comp.name}`}
+      </button>
+    );
+  };
 
   // Cancel Edit Button Component
   private readonly CancelEditButton = (comp: any): JSX.Element => {
-    const state: string = comp.editing ? "block" : "hidden";
     return (
       <button
         onClick={() => this.updateComp(comp, { editing: false })}
-        className={`mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200 ${state}`}
+        className={`mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200 ${
+          comp.editing ? "block" : "hidden"
+        }`}
       >
         Cancel
       </button>
@@ -173,7 +159,7 @@ export default class ComponentsList extends React.Component {
       }`}
       value={comp.content}
       defaultLanguage="html"
-      options={Utils.MONACO_CONFIG}
+      options={config.monaco_options}
     />
   );
 
@@ -194,14 +180,26 @@ export default class ComponentsList extends React.Component {
   };
 
   // Delete button component
-  private readonly DeleteButton = (comp: any): JSX.Element => (
-    <button
-      onClick={() => this.onDeleteButtonClicked(comp)}
-      className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
-    >
-      {comp.confirm_deletion ? `Confirm` : `Delete ${comp.name}`}
-    </button>
-  );
+  private readonly DeleteButton = (comp: any): JSX.Element => {
+    const onClick = (comp: any): void => {
+      if (comp.confirm_deletion) {
+        this.deleteComponent(comp);
+        this.updateComp(comp, {
+          confirm_deletion: false,
+          status: "Deleting component",
+        });
+      } else this.updateComp(comp, { confirm_deletion: true });
+    };
+
+    return (
+      <button
+        onClick={() => onClick(comp)}
+        className="mx-2 p-3 text-slate-900 text-sm hover:bg-gray-50 rounded-lg border-[1px] border-gray-200"
+      >
+        {comp.confirm_deletion ? `Confirm` : `Delete ${comp.name}`}
+      </button>
+    );
+  };
 
   // Cancel Deletion Button Component
   private readonly CancelDeletionButton = (comp: any): JSX.Element => {
@@ -234,8 +232,8 @@ export default class ComponentsList extends React.Component {
           </div>
           {this.MonacoEditor(comp)}
           <iframe
-            srcDoc={Utils.wrapHtml(comp.content)}
-            className="w-[60rem] h-96 pt-10 mx-5 rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200"
+            srcDoc={HtmlUtils.wrap(comp.content)}
+            className="w-[60rem] h-96 pt-10 mx-5 rounded-lg rounded-t-none border-[1px] border-gray-200 bg-gray-50"
             title={comp.name}
           />
         </div>

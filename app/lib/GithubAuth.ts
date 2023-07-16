@@ -1,34 +1,31 @@
 import Params from "./Params";
+import config from "./Config";
 
 export default class GithubAuth {
-  private readonly CLIENT_ID: string = "Iv1.2a8798736f1f1aa0";
-  private readonly IS_PRODUCTION: boolean = true;
-  private readonly HOME_URI: string = this.IS_PRODUCTION
-    ? "https://tailwindcomponents-gules.vercel.app"
-    : "http://localhost:3000"; 
- 
-  // Get values from the url params
-  private get = (value: string): string | null =>
-    new URLSearchParams(window.location.search).get(value);
+  public readonly error = (): string | null => Params.get("error");
 
-  // Errors
-  public readonly error = (): string | null => this.get("error");
-  public readonly errorUri = (): string | null => this.get("error_uri");
-  public readonly errorDescription = (): string | null => this.get("error_description");
-  // Code, scope, token type
-  public readonly code = (): string | null => this.get("code");
-  public readonly scope = (): string | null => this.get("scope");
-  public readonly tokenType = (): string | null => this.get("token_type");
-  // Tokens
-  public readonly accessToken = (): string | null => this.get("access_token");
-  public readonly refreshToken = (): string | null => this.get("refresh_token");
-  // Expires in
-  public readonly expiresIn = (): string | null => this.get("expires_in");
-  public readonly refreshTokenExpiresIn = (): string | null => this.get("refresh_token_expires_in");
-  // Expires at
-  public readonly expiresAt = (): string | null => this.get("expires_at");
-  public readonly refreshTokenExpiresAt = (): string | null => this.get("refresh_token_expires_at");
-  // Upload Data
+  public readonly errorUri = (): string | null => Params.get("error_uri");
+
+  public readonly errorDescription = (): string | null => Params.get("error_description");
+
+  public readonly code = (): string | null => Params.get("code");
+
+  public readonly scope = (): string | null => Params.get("scope");
+
+  public readonly tokenType = (): string | null => Params.get("token_type");
+
+  public readonly accessToken = (): string | null => Params.get("access_token");
+
+  public readonly refreshToken = (): string | null => Params.get("refresh_token");
+
+  public readonly expiresIn = (): string | null => Params.get("expires_in");
+
+  public readonly refreshTokenExpiresIn = (): string | null => Params.get("refresh_token_expires_in");
+
+  public readonly expiresAt = (): string | null => Params.get("expires_at");
+
+  public readonly refreshTokenExpiresAt = (): string | null => Params.get("refresh_token_expires_at");
+
   public readonly uploadData = (): any => {
     return {
       access_token: this.accessToken(),
@@ -38,27 +35,24 @@ export default class GithubAuth {
     }
   }
 
-  // Open the auth window
   private readonly openAuthWindow = (): void => {
-    window.location.href = `https://github.com/login/oauth/authorize?client_id=${this.CLIENT_ID}&redirect_uri=${this.HOME_URI}`;
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${config.client_id}&redirect_uri=${config.home_uri}`;
   };
 
-  // Check if the user is logged in
   public readonly isLoggedIn = (): boolean => this.accessToken() !== null;
+
   public readonly errorOccurred = (): boolean => this.error() !== null;
 
-  // Set the url params
   private readonly setUrlParams = (json: any): void => Params.set(json);
 
-  // Get the access token
   private readonly fetchAccessToken = (code: string): void => {
-    fetch(`${this.HOME_URI}/api/auth`, {
+    fetch(`${config.home_uri}/api/auth`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         code: code,
-        client_id: this.CLIENT_ID,
-        redirect_uri: this.HOME_URI,
+        client_id: config.client_id,
+        redirect_uri: config.home_uri,
       }),
     })
       .then((resp) => resp.json())
@@ -66,7 +60,6 @@ export default class GithubAuth {
       .catch((error) => console.log(error));
   };
 
-  // Main login function
   public login(): void {
     if (this.isLoggedIn()) return;
 

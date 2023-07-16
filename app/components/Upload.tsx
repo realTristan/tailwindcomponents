@@ -1,6 +1,7 @@
 import React from "react";
-import Utils from "../lib/Utils";
+import HtmlUtils from "../utils/Html";
 import Editor from "@monaco-editor/react";
+import config from "../lib/Config";
 
 // Upload Component
 export default class Upload extends React.Component {
@@ -23,14 +24,15 @@ export default class Upload extends React.Component {
   }
 
   // Upload the component
-  private readonly uploadComponent = (): void => {
+  private readonly uploadComponent = async (): Promise<void> => {
     if (!this.state.component_name || !this.state.component_content) {
       this.setState({ status: "Component Name or Content is Empty" });
       return;
     }
+
     this.setState({ status: "Uploading Component" });
 
-    fetch(
+    await fetch(
       `https://api.github.com/repos/realTristan/tailwindcomponents/contents/tailwindcomponents/${this.state.component_name}/.html`,
       {
         method: "PUT",
@@ -47,11 +49,8 @@ export default class Upload extends React.Component {
     )
       .then((res) => res.status)
       .then((status) => {
-        if (status === 201) {
-          this.setState({ status: "Component Uploaded" });
-        } else {
-          this.setState({ status: "Component Upload Failed" });
-        }
+        if (status === 201) this.setState({ status: "Component Uploaded" });
+        else this.setState({ status: "Component Upload Failed" });
       });
   };
 
@@ -81,11 +80,11 @@ export default class Upload extends React.Component {
           this.state.component_content ? "border-b-0 rounded-b-none" : ""
         }`}
         defaultLanguage="html"
-        options={Utils.MONACO_CONFIG}
+        options={config.monaco_options}
       />
       <iframe
-        srcDoc={Utils.wrapHtml(this.state.component_content)}
-        className={`w-[60rem] h-96 p-8 mx-5 rounded-lg rounded-t-none bg-gray-100 border-[1px] border-gray-200 ${
+        srcDoc={HtmlUtils.wrap(this.state.component_content)}
+        className={`w-[60rem] h-96 p-8 mx-5 rounded-lg rounded-t-none bg-gray-50 border-[1px] border-gray-200 ${
           this.state.component_content ? "" : "hidden"
         }`}
         title={this.state.component_name}
