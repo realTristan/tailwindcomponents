@@ -1,0 +1,151 @@
+<!--
+    "use client";
+
+import React from "react";
+import Image from "next/image";
+
+export default function Bottom(): JSX.Element {
+  return (
+    <div
+      id="bottom"
+      className="mt-20 flex h-auto w-screen flex-col justify-between border-t-4 border-t-secondary bg-primary p-10 pb-20 md:items-center lg:flex-row lg:justify-center lg:pb-32 xl:p-20 xl:pb-40"
+    >
+      <div className="relative top-12 hidden flex-row lg:flex">
+        <NavigationLinks />
+        <Services />
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        <Image
+          key={Math.random()}
+          width={781}
+          height={736}
+          loading="lazy"
+          src="/images/dominion_lending_logo_noBg.png"
+          alt="..."
+          className="mx-5 flex h-44 w-44"
+        />
+      </div>
+      <div className="flex flex-col md:flex-row lg:flex-col">
+        <div className="mb-10 mt-6 flex flex-row justify-between lg:hidden">
+          <NavigationLinks />
+          <Services />
+        </div>
+        <Offices />
+      </div>
+    </div>
+  );
+}
+
+const NavigationLinks = (): JSX.Element => (
+  <div className="flex flex-col">
+    <h2 className="text-lg font-bold tracking-wider text-white md:text-xl">
+      Navigation
+    </h2>
+    <a
+      href="#home"
+      className="my-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+    >
+      Home
+    </a>
+    <a
+      href="#services"
+      className="mb-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+    >
+      Services
+    </a>
+    <a
+      href="#about"
+      className="mb-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+    >
+      About
+    </a>
+    <a
+      href="#contact"
+      className="mb-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+    >
+      Contact
+    </a>
+  </div>
+);
+
+const Services = (): JSX.Element => (
+  <div className="ml-14 flex flex-col text-right md:text-left lg:mr-14">
+    <h2 className="text-lg font-bold tracking-wider text-white md:text-xl">
+      Services
+    </h2>
+    <a
+      href=""
+      className="my-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+    >
+      Residential Mortgages
+    </a>
+    <a
+      href=""
+      className="mb-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+    >
+      Commercial Mortgages
+    </a>
+    <a
+      href=""
+      className="mb-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+    >
+      Access Equity
+    </a>
+    <a
+      href=""
+      className="mb-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+    >
+      Second Property
+    </a>
+    <a
+      href=""
+      className="mb-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+    >
+      Investment Property
+    </a>
+  </div>
+);
+
+// Offices
+// Link each office url to another page with the office picture and info
+const Offices = (): JSX.Element => (
+  <div className="mt-6 flex flex-row justify-between md:ml-14 md:justify-normal">
+    <div className="flex flex-col">
+      <h2 className="text-base font-bold tracking-wider text-white md:text-xl">
+        Sportsworld
+      </h2>
+      <a
+        href=""
+        className="my-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+      >
+        +1 519-885-8852
+      </a>
+      <a
+        href=""
+        className="mb-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+      >
+        50 Sportsworld <br />
+        Crossing - Unit 230
+      </a>
+    </div>
+    <div className="ml-14 flex flex-col text-right md:text-left md:text-base">
+      <h2 className="text-base font-bold tracking-wider text-white md:text-xl">
+        Victoria St.
+      </h2>
+      <a
+        href=""
+        className="my-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+      >
+        +1 519-885-8852
+      </a>
+      <a
+        href=""
+        className="mb-2 text-sm text-para underline underline-offset-4 hover:text-secondary md:text-base"
+      >
+        50 Sportsworld <br />
+        Crossing - Unit 230
+      </a>
+    </div>
+  </div>
+);
+-->
