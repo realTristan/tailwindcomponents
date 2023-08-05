@@ -1,0 +1,30 @@
+<!--
+"use client";
+
+import React from "react";
+
+export default function ScrollIndicator(): JSX.Element {
+  const [scrollPercent, setScrollPercent] = React.useState(0);
+
+  // Set the window listener
+  React.useEffect(() => {
+    window.addEventListener("scroll", () => {
+      let winScroll: number =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      let height: number =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      setScrollPercent((winScroll / height) * 100);
+    });
+  }, []);
+
+  return (
+    <div className="fixed bottom-0 z-20 h-4 w-screen bg-gray-50">
+      <div
+        className="fixed bottom-0 h-4 bg-tertiary ease-in-out"
+        style={{ width: `${scrollPercent}%` }}
+      ></div>
+    </div>
+  );
+}
+-->
