@@ -1,0 +1,247 @@
+<!--
+"use client";
+
+import React from "react";
+import Image from "next/image";
+
+import { BsFillArrowRightCircleFill } from "react-icons/bs";
+import { RxDotFilled } from "react-icons/rx";
+
+export default class Lenders extends React.Component {
+  // State
+  state: any = {
+    currentSize: 0,
+    lastIndex: 0,
+    lenders: [],
+  };
+
+  // Constructor
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      currentSize: 0,
+      lastIndex: 0,
+      lenders: [],
+    };
+
+    // Fetch the lenders from /api/lenders
+    fetch("/api/files?file=lenders.json")
+      .then((res) => res.json())
+      .then((lenders: any) => {
+        // Update the lenders
+        this.setState({ lenders: lenders }, () => this.setSize());
+
+        // Set window listener
+        window.addEventListener("resize", () => this.setSize());
+      });
+  }
+
+  // Set the size state
+  setSizeState = (size: number) => {
+    if (size !== this.state.currentSize) {
+      this.setState({ currentSize: size });
+      this.setLastIndex(0);
+    }
+  };
+
+  // Set the size
+  setSize = (): void => {
+    // Small screen size
+    if (window.innerWidth <= 768) this.setSizeState(3);
+    else if (window.innerWidth >= 768 && window.innerWidth <= 1024)
+      this.setSizeState(6);
+    else if (window.innerWidth >= 1024 && window.innerWidth <= 1280)
+      this.setSizeState(9);
+    else if (window.innerWidth >= 1280) this.setSizeState(12);
+  };
+
+  // Get the  lenders depending on the size
+  getLenders = (): any[] => {
+    let lenders: any[] = [];
+
+    if (!this.state.lenders || !this.state.currentSize) return lenders;
+
+    const lastIndex: number = this.state.lastIndex;
+    const size: number = this.state.currentSize;
+
+    const len: number = this.state.lenders.length;
+    for (let i = lastIndex; i < lastIndex + size; i++) {
+      if (i >= len) lenders.push(this.state.lenders[i - len]);
+      else lenders.push(this.state.lenders[i]);
+    }
+    return lenders;
+  };
+
+  // Set the last index
+  setLastIndex = (index: number): void => this.setState({ lastIndex: index });
+
+  // Move to the previous slide
+  prevSlide = (): void => {
+    // Fade out the lenders
+    const size: number = this.state.currentSize;
+
+    // Fade duration
+    const fadeDuration: number = 500;
+
+    // Fade out the lenders
+    for (let i = 0; i < size; i++) {
+      const lender: any = document.getElementById(`lender-${i}`);
+      if (lender) {
+        lender.style.transition = `${fadeDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+        lender.style.opacity = "0";
+      }
+    }
+
+    // Wait for the fade out
+    setTimeout(() => {
+      // Move to the prev slide
+      const prevIndex: number = this.state.lastIndex - this.state.currentSize;
+      if (prevIndex < 0) this.setLastIndex(this.state.lenders.length - 1);
+      else this.setLastIndex(prevIndex);
+
+      // Fade in the lenders
+      for (let i = 0; i < size; i++) {
+        const lender: any = document.getElementById(`lender-${i}`);
+        if (lender) lender.style.opacity = "1";
+      }
+    }, 500);
+  };
+
+  // Move to the next slide
+  nextSlide = (): void => {
+    // Fade out the lenders
+    const size: number = this.state.currentSize;
+
+    // Fade duration
+    const fadeDuration: number = 500;
+
+    // Fade out the lenders
+    for (let i = 0; i < size; i++) {
+      const lender: any = document.getElementById(`lender-${i}`);
+      if (lender) {
+        lender.style.transition = `${fadeDuration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+        lender.style.opacity = "0";
+      }
+    }
+
+    // Wait for the fade out
+    setTimeout(() => {
+      // Move to the next slide
+      const nextIndex: number = this.state.lastIndex + this.state.currentSize;
+      if (nextIndex >= this.state.lenders.length) this.setLastIndex(0);
+      else this.setLastIndex(nextIndex);
+
+      // Fade in the lenders
+      for (let i = 0; i < size; i++) {
+        const lender: any = document.getElementById(`lender-${i}`);
+        if (lender) lender.style.opacity = "1";
+      }
+    }, 500);
+  };
+
+  // Get the dot array
+  getDotArray = (lenders: any[]): number[] => {
+    let dots: number[] = [];
+    if (!lenders || !this.state.currentSize) return dots;
+
+    const arraySize: number = Math.ceil(
+      this.state.lenders.length / this.state.currentSize
+    );
+    for (let i = 0; i < arraySize; i++) dots.push(i);
+    return dots;
+  };
+
+  // Fade in lender
+  LendersCards = (lenders: any[]): JSX.Element => (
+    <div className="group relative grid h-[500px] grid-cols-1 gap-8 px-4 py-10 sm:mx-32 sm:py-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {lenders.map((lender: any, i: number) => (
+        <a
+          id={`lender-${i}`}
+          href={lender.href}
+          rel="noopener noreferrer"
+          target="_blank"
+          key={i}
+          className="mx-2 flex h-32 w-52 flex-col items-center justify-center rounded-3xl border-4 border-gray-200 bg-gray-100 p-10 text-center ease-in-out hover:border-secondary"
+        >
+          <Image
+            key={i}
+            src={lender.logo}
+            loading="lazy"
+            width={200}
+            height={200}
+            alt="..."
+          />
+        </a>
+      ))}
+    </div>
+  );
+
+  // Render the component
+  render = (): JSX.Element => {
+    // Get the current cluster
+    const lenders: any[] = this.getLenders();
+
+    // Return the component jsx
+    return (
+      <div
+        id="lenders"
+        className="group relative flex flex-col items-center justify-center bg-gray-50 p-10 py-16 pt-20 text-center"
+      >
+        <h2 className="text-6xl font-extrabold text-primary lg:text-7xl">
+          Lenders
+        </h2>
+        <span className="mx-10 mb-6 mt-5 block h-1 w-2/5 rounded-full bg-secondary xs:w-1/4 sm:mb-10 sm:mt-7 lg:w-72"></span>
+        <p className="w-3/4 text-base text-primary sm:mb-4 sm:w-1/2">
+          We have access to hundreds of reputable lending institutions to
+          provide you with more options - and the{" "}
+          <strong className="tracking-wide">best mortgage products</strong> to
+          suit your needs. Below is a snapshot of our lender partners and
+          associations!
+        </p>
+
+        {/* Lenders */}
+        {lenders && this.LendersCards(lenders)}
+
+        {/* Left Arrow */}
+        {lenders && (
+          <div className="absolute left-8 top-[62%] cursor-pointer rounded-full bg-black/20 p-2 text-2xl text-white hover:bg-secondary/80 sm:left-16">
+            <BsFillArrowRightCircleFill
+              onClick={this.prevSlide}
+              size={30}
+              className="scale-x-[-1]"
+            />
+          </div>
+        )}
+
+        {/* Right Arrow */}
+        {lenders && (
+          <div className="absolute right-8 top-[62%] cursor-pointer rounded-full bg-black/20 p-2 text-2xl text-white hover:bg-secondary/80 sm:right-16">
+            <BsFillArrowRightCircleFill onClick={this.nextSlide} size={30} />
+          </div>
+        )}
+
+        {/* Dots at the bottom of the lenders */}
+        <div className="mt-10 flex justify-center py-2">
+          {this.getDotArray(lenders).map((i: number) => (
+            <div
+              key={i}
+              className={`${
+                this.state.lastIndex / this.state.currentSize === i
+                  ? "text-secondary hover:brightness-110"
+                  : "text-black/20 hover:text-black/30"
+              } mx-0.5 cursor-pointer`}
+            >
+              <RxDotFilled
+                onClick={() => this.setLastIndex(i * this.state.currentSize)}
+                size={30}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+}
+-->
+<img src="https://media.discordapp.net/attachments/855448636880191499/1136723611554693210/Screenshot_2023-08-03_at_2.13.42_PM.png?width=1882&height=816")]
+  w-screen h-screen"">
