@@ -1,0 +1,449 @@
+<!--
+"use client";
+
+import React from "react";
+import { BsFillArrowRightCircleFill } from "react-icons/bs";
+import { RxDotFilled } from "react-icons/rx";
+
+/**
+ * Testimonials Component
+ */
+export default class Testimonials extends React.Component {
+  state: any;
+
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      translation: 0,
+      testimonials: [],
+      cardSize: 300,
+      // screenSize: "lg",
+      sliderIndex: 0,
+      autoTranslateInterval: null,
+    };
+
+    this.fetchTestimonials().then((res) => {
+      this.setState({
+        testimonials: res,
+        sliderIndex: this.getMiddleSliderIndex(res),
+        autoTranslateInterval: this.newAutoTranslateInterval(),
+      });
+
+      this.setResizeListener();
+    });
+  }
+
+  /**
+   * Get the middle slider index
+   * @returns number
+   */
+  getMiddleSliderIndex = (testimonials: any): number =>
+    Math.ceil((testimonials.length - 1) / 2);
+
+  /**
+   * Get the auto translation Interval
+   * @returns Interval
+   */
+  newAutoTranslateInterval = (): any =>
+    setInterval(() => this.nextSlide(), 4000);
+
+  /**
+   * Reset the auto translate Interval
+   */
+  resetAutoTranslateInterval = (): void => {
+    clearInterval(this.state.autoTranslateInterval);
+    this.setState({
+      autoTranslateInterval: this.newAutoTranslateInterval(),
+    });
+  };
+
+  /**
+   * Get the screen size
+   * @returns string
+   */
+  /*getScreenSize = (): string => {
+    const width: number = window.innerWidth;
+    if (width < 640) return "xs";
+    if (width < 768) return "sm";
+    if (width < 1024) return "md";
+    if (width < 1280) return "lg";
+    if (width < 1536) return "xl";
+    return "2xl";
+  };*/
+
+  /**
+   * Get the size of the card
+   * @returns number
+   */
+  getCardSize = (testimonials: any): number => {
+    /*const id: any = "testimonial-card-" + testimonials[0].key;
+    const card: any = document.getElementById(id);
+    if (!card) return 0;
+
+    const marginOffset: number = 48;
+    return card.clientWidth + marginOffset;*/
+    
+    // If small screen
+    const width: number = window.innerWidth;
+    if (width < 640) return 200;
+    else if (width < 768) return 250;
+    else if (width < 1024) return 300;
+    else if (width < 1280) return 350;
+    else if (width < 1536) return 400;
+    else return 450;
+  };
+
+  /**
+   * Window resize listener to update the size
+   * @returns void
+   */
+  setResizeListener = (): void =>
+    window.addEventListener("resize", () => {
+      // Check if the screen size has changed
+      // const screenSize: string = this.getScreenSize();
+      // if (screenSize == this.state.screenSize) return;
+
+      // Get the new size
+      const newSize: number = this.getCardSize(this.state.testimonials);
+
+      // Update the state
+      clearInterval(this.state.autoTranslateInterval);
+      this.setState({
+        cardSize: newSize,
+        // screenSize: screenSize,
+        translation: 0,
+        sliderIndex: this.getMiddleSliderIndex(this.state.testimonials),
+        autoTranslateInterval: this.newAutoTranslateInterval(),
+      });
+    });
+
+  /**
+   * Get the current size in px of the testimonial cards
+   */
+  getTestimonialsSize = (size: number): number =>
+    (size * (this.state.testimonials.length - 1)) / 2;
+
+  // Reset the translation
+  resetTranslation = (): void => {
+    const size: number = this.getTestimonialsSize(this.state.cardSize);
+
+    // Update the translation and slider index
+    this.setState({
+      translation: this.state.sliderIndex == 0 ? -size : size,
+      sliderIndex:
+        this.state.sliderIndex == 0 ? this.state.testimonials.length - 1 : 0,
+    });
+  };
+
+  /**
+   * Move to the next card position
+   * @returns void
+   */
+  /*moveNext = (): void => {
+    const getCardPositionCenter = (key: string) => {
+      const id: any = "testimonial-card-" + key;
+      const card: any = document.getElementById(id);
+      const pos: number = card.getBoundingClientRect().left;
+      return pos + card.clientWidth / 2;
+    };
+
+    // Get the position of the current card
+    const pos1: number = getCardPositionCenter(
+      this.state.testimonials[this.state.sliderIndex].key
+    );
+
+    // Get the position of the next card
+    const pos2: number = getCardPositionCenter(
+      this.state.testimonials[this.state.sliderIndex + 1].key
+    );
+
+    // Get the distance between the two cards
+    const dist: number = pos2 - pos1;
+
+    // Update the translation
+    this.setState({
+      translation: this.state.translation - dist,
+    });
+  };*/
+
+  /**
+   * Move to the previous card position
+   * @returns void
+   */
+  /*movePrev = (): void => {
+    const getCardPositionCenter = (key: string) => {
+      const id: any = "testimonial-card-" + key;
+      const card: any = document.getElementById(id);
+      const pos: number = card.getBoundingClientRect().left;
+      return pos + card.clientWidth / 2;
+    };
+
+    // Get the position of the current card
+    const pos1: number = getCardPositionCenter(
+      this.state.testimonials[this.state.sliderIndex].key
+    );
+
+    // Get the position of the next card
+    const pos2: number = getCardPositionCenter(
+      this.state.testimonials[this.state.sliderIndex - 1].key
+    );
+
+    // Get the distance between the two cards
+    const dist: number = pos1 - pos2;
+
+    // Update the translation
+    this.setState({
+      translation: this.state.translation + dist,
+    });
+  };*/
+
+  // Next slide
+  nextSlide = (): void => {
+    // If we've reached the end
+    if (this.state.sliderIndex == this.state.testimonials.length - 1)
+      return this.resetTranslation();
+
+    // Update the translation and testimonials
+    this.setState({
+      translation: this.state.translation - this.state.cardSize,
+      sliderIndex: this.state.sliderIndex + 1,
+    });
+
+    // Move to the next card
+    // this.moveNext();
+  };
+
+  // Previous slide
+  prevSlide = (): void => {
+    // If we've reached the beginning
+    if (this.state.sliderIndex == 0) return this.resetTranslation();
+
+    // Update the translation and slider index
+    this.setState({
+      translation: this.state.translation + this.state.cardSize,
+      sliderIndex: this.state.sliderIndex - 1,
+    });
+
+    // Move to the prev card
+    // this.movePrev();
+  };
+
+  /**
+   * Fetch the testimonials
+   * @returns Promise
+   */
+  fetchTestimonials = (): Promise<any> =>
+    fetch("/api/json?f=testimonials.json").then((res) => res.json());
+
+  /**
+   * On Swipe
+   */
+  onSwipe = (e: any, nextSlide: any, prevSlide: any): void => {
+    // If the direction is right, go to the previous slide
+    const isRight = e.deltaX > 0;
+    if (isRight) prevSlide();
+
+    // If the direction is left, go to the next slide
+    const isLeft = e.deltaX < 0;
+    if (isLeft) nextSlide();
+
+    // Reset the automatic translation Interval
+    this.resetAutoTranslateInterval();
+  };
+
+  // Return the component
+  render = () => (
+    <div
+      id="testimonials"
+      className="group relative flex w-full flex-col items-center justify-center bg-gray-50 p-10 py-16 pt-20"
+    >
+      <Header />
+
+      {this.state.testimonials && (
+        <div className="mx-5 mt-20 flex h-52 w-screen flex-row items-center justify-center lg:mt-32 lg:w-full">
+          <LeftArrow
+            onClick={() => {
+              this.prevSlide();
+              this.resetAutoTranslateInterval();
+            }}
+          />
+          <TestimonialCards
+            translation={this.state.translation}
+            sliderIndex={this.state.sliderIndex}
+            testimonials={this.state.testimonials}
+            onSwipe={this.onSwipe}
+            nextSlide={this.nextSlide}
+            prevSlide={this.prevSlide}
+          />
+          <RightArrow
+            onClick={() => {
+              this.nextSlide();
+              this.resetAutoTranslateInterval();
+            }}
+          />
+        </div>
+      )}
+
+      {/* Dots at the bottom of the lenders */}
+      {this.state.testimonials && <CarouselDots {...this.state} />}
+    </div>
+  );
+}
+
+/**
+ * Header Component
+ * @returns JSX.Element
+ */
+const Header = (): JSX.Element => (
+  <div className="flex flex-col items-center justify-center">
+    <h2 className="text-5xl font-extrabold text-primary sm:text-7xl">
+      Testimonials
+    </h2>
+    <span className="mx-10 mb-6 mt-5 block h-1 w-2/5 rounded-full bg-secondary xs:w-1/4 sm:mb-10 sm:mt-7 lg:w-72"></span>
+    <p className="mb-4 w-3/4 text-center text-base text-primary sm:w-1/2">
+      Trusting the right mortgage brokerage is vital. Because of our dedication
+      to <strong>exceptional service</strong> and{" "}
+      <strong>unwavering commitment</strong>, our clients have shared testiments
+      of their experiences with us.
+    </p>
+  </div>
+);
+
+/**
+ * Left Arrow Component
+ */
+const LeftArrow = (props: { onClick: any }) => (
+  <div className="relative left-0 ml-5 hidden cursor-pointer rounded-full bg-black/20 p-2 text-2xl text-white backdrop-blur-md hover:bg-secondary/80 lg:block">
+    <BsFillArrowRightCircleFill
+      onClick={props.onClick}
+      size={30}
+      className="scale-x-[-1]"
+    />
+  </div>
+);
+
+/**
+ * Right Arrow Component
+ */
+const RightArrow = (props: { onClick: any }) => (
+  <div className="relative right-0 mr-5 hidden cursor-pointer rounded-full bg-black/20 p-2 text-2xl text-white backdrop-blur-md hover:bg-secondary/80 lg:block">
+    <BsFillArrowRightCircleFill onClick={props.onClick} size={30} />
+  </div>
+);
+
+/**
+ * Testimonial Cards Component
+ * @param props
+ * @returns Testimonial Cards Component JSX
+ */
+const TestimonialCards = (props: {
+  translation: number;
+  sliderIndex: number;
+  testimonials: any[];
+  onSwipe: any;
+  nextSlide: any;
+  prevSlide: any;
+}): JSX.Element => (
+  <div
+    className="mx-6 flex cursor-grab flex-col overflow-hidden xs:mx-10 sm:mx-16 lg:mx-20"
+    onTouchStart={(e) => props.onSwipe(e, props.nextSlide, props.prevSlide)}
+    onTouchEnd={(e) => props.onSwipe(e, props.nextSlide, props.prevSlide)}
+    onScroll={(e) => props.onSwipe(e, props.nextSlide, props.prevSlide)}
+    onTouchMove={(e) => props.onSwipe(e, props.nextSlide, props.prevSlide)}
+  >
+    <div
+      className="flex flex-row items-center justify-center"
+      style={{
+        transform: `translateX(${props.translation}px)`,
+        transition: "transform ease-out 0.5s",
+      }}
+    >
+      {props.testimonials.map((t: any, i: number) => (
+        <TestimonialCard
+          key={t.key}
+          testimonial={t}
+          currentIndex={i}
+          sliderIndex={props.sliderIndex}
+        />
+      ))}
+    </div>
+  </div>
+);
+
+/**
+ * Testimonial Card Component
+ * @returns Testimonial Card Component JSX
+ */
+const TestimonialCard = (props: {
+  testimonial: any;
+  currentIndex: number;
+  sliderIndex: number;
+}) => (
+  <div
+    id={`testimonial-card-${props.testimonial.key}`}
+    className="mx-3 flex flex-col items-center justify-center rounded-xl border-2 border-gray-50 p-20 px-24 text-center duration-500 ease-in-out hover:border-secondary hover:duration-0 md:mx-5"
+  >
+    <h2 className="mt-5 text-lg font-bold text-primary">
+      {props.testimonial.name}
+    </h2>
+    <div className="mt-2 flex flex-row items-center justify-center">
+      <StarSVG />
+      <StarSVG />
+      <StarSVG />
+      <StarSVG />
+      <StarSVG />
+    </div>
+    <p className="mt-5 text-base font-medium text-primary">
+      {props.testimonial.testimonial}
+    </p>
+  </div>
+);
+
+/**
+ * Star SVG Component
+ * @returns Star SVG Component JSX
+ */
+const StarSVG = (): JSX.Element => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-5 w-5 text-secondary"
+    viewBox="0 0 20 20"
+    fill="currentColor"
+  >
+    <path
+      fillRule="evenodd"
+      d="M10 15.585l-5.959 3.025 1.14-6.629L.293 6.415l6.664-.97L10 .585l3.043 5.86 6.664.97-4.888 4.566 1.14 6.629z"
+      clipRule="evenodd"
+    />
+  </svg>
+);
+
+/**
+ * Carousel Dots Component
+ * @returns JSX.Element
+ */
+const CarouselDots = (props: {
+  testimonials: any[];
+  sliderIndex: number;
+}): JSX.Element => {
+  const dots: number[] = [];
+  const len: number = props.testimonials.length;
+  for (let i = 0; i < len; i++) dots.push(i);
+
+  return (
+    <div className="mt-28 flex justify-center py-2">
+      {dots.map((i: number) => (
+        <div
+          key={i}
+          className={`${
+            props.sliderIndex === i ? "text-tertiary" : "text-black/20"
+          } mx-0.5`}
+        >
+          <RxDotFilled size={30} />
+        </div>
+      ))}
+    </div>
+  );
+};
+-->
+<img src="https://cdn.discordapp.com/attachments/855448636880191499/1137450598107713647/image.png"/>
